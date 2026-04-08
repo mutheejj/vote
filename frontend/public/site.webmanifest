@@ -1,0 +1,52 @@
+{
+  "name": "UniElect Voting System",
+  "short_name": "UniElect",
+  "description": "Secure university election voting platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#528068",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/unielect-logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/unielect-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Vote",
+      "short_name": "Vote",
+      "description": "Cast your vote",
+      "url": "/vote",
+      "icons": [
+        {
+          "src": "/images/unielect-logo.jpg",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Results",
+      "short_name": "Results",
+      "description": "View election results",
+      "url": "/results",
+      "icons": [
+        {
+          "src": "/images/unielect-logo.jpg",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
