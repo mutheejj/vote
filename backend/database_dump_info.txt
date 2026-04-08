@@ -1,0 +1,1089 @@
+========================================
+ALL DATABASE INDEXES
+========================================
+
+Table: Achievement
+Index: Achievement_isActive_idx
+Definition: CREATE INDEX "Achievement_isActive_idx" ON public."Achievement" USING btree ("isActive")
+
+Table: Achievement
+Index: Achievement_pkey
+Definition: CREATE UNIQUE INDEX "Achievement_pkey" ON public."Achievement" USING btree (id)
+
+Table: Achievement
+Index: Achievement_type_idx
+Definition: CREATE INDEX "Achievement_type_idx" ON public."Achievement" USING btree (type)
+
+Table: AdminInvitation
+Index: AdminInvitation_email_idx
+Definition: CREATE INDEX "AdminInvitation_email_idx" ON public."AdminInvitation" USING btree (email)
+
+Table: AdminInvitation
+Index: AdminInvitation_expiresAt_idx
+Definition: CREATE INDEX "AdminInvitation_expiresAt_idx" ON public."AdminInvitation" USING btree ("expiresAt")
+
+Table: AdminInvitation
+Index: AdminInvitation_invitationToken_idx
+Definition: CREATE INDEX "AdminInvitation_invitationToken_idx" ON public."AdminInvitation" USING btree ("invitationToken")
+
+Table: AdminInvitation
+Index: AdminInvitation_invitationToken_key
+Definition: CREATE UNIQUE INDEX "AdminInvitation_invitationToken_key" ON public."AdminInvitation" USING btree ("invitationToken")
+
+Table: AdminInvitation
+Index: AdminInvitation_pkey
+Definition: CREATE UNIQUE INDEX "AdminInvitation_pkey" ON public."AdminInvitation" USING btree (id)
+
+Table: AdminInvitation
+Index: AdminInvitation_used_idx
+Definition: CREATE INDEX "AdminInvitation_used_idx" ON public."AdminInvitation" USING btree (used)
+
+Table: Analytics
+Index: Analytics_date_idx
+Definition: CREATE INDEX "Analytics_date_idx" ON public."Analytics" USING btree (date)
+
+Table: Analytics
+Index: Analytics_entityType_entityId_idx
+Definition: CREATE INDEX "Analytics_entityType_entityId_idx" ON public."Analytics" USING btree ("entityType", "entityId")
+
+Table: Analytics
+Index: Analytics_eventType_idx
+Definition: CREATE INDEX "Analytics_eventType_idx" ON public."Analytics" USING btree ("eventType")
+
+Table: Analytics
+Index: Analytics_pkey
+Definition: CREATE UNIQUE INDEX "Analytics_pkey" ON public."Analytics" USING btree (id)
+
+Table: Analytics
+Index: Analytics_timestamp_idx
+Definition: CREATE INDEX "Analytics_timestamp_idx" ON public."Analytics" USING btree ("timestamp")
+
+Table: Analytics
+Index: Analytics_userId_idx
+Definition: CREATE INDEX "Analytics_userId_idx" ON public."Analytics" USING btree ("userId")
+
+Table: AuditLog
+Index: AuditLog_category_idx
+Definition: CREATE INDEX "AuditLog_category_idx" ON public."AuditLog" USING btree (category)
+
+Table: AuditLog
+Index: AuditLog_category_severity_idx
+Definition: CREATE INDEX "AuditLog_category_severity_idx" ON public."AuditLog" USING btree (category, severity)
+
+Table: AuditLog
+Index: AuditLog_createdAt_idx
+Definition: CREATE INDEX "AuditLog_createdAt_idx" ON public."AuditLog" USING btree ("createdAt")
+
+Table: AuditLog
+Index: AuditLog_electionId_createdAt_idx
+Definition: CREATE INDEX "AuditLog_electionId_createdAt_idx" ON public."AuditLog" USING btree ("electionId", "createdAt" DESC)
+
+Table: AuditLog
+Index: AuditLog_electionId_idx
+Definition: CREATE INDEX "AuditLog_electionId_idx" ON public."AuditLog" USING btree ("electionId")
+
+Table: AuditLog
+Index: AuditLog_pkey
+Definition: CREATE UNIQUE INDEX "AuditLog_pkey" ON public."AuditLog" USING btree (id)
+
+Table: AuditLog
+Index: AuditLog_severity_createdAt_idx
+Definition: CREATE INDEX "AuditLog_severity_createdAt_idx" ON public."AuditLog" USING btree (severity, "createdAt")
+
+Table: AuditLog
+Index: AuditLog_userId_category_createdAt_idx
+Definition: CREATE INDEX "AuditLog_userId_category_createdAt_idx" ON public."AuditLog" USING btree ("userId", category, "createdAt")
+
+Table: AuditLog
+Index: AuditLog_userId_createdAt_category_idx
+Definition: CREATE INDEX "AuditLog_userId_createdAt_category_idx" ON public."AuditLog" USING btree ("userId", "createdAt" DESC, category)
+
+Table: AuditLog
+Index: AuditLog_userId_idx
+Definition: CREATE INDEX "AuditLog_userId_idx" ON public."AuditLog" USING btree ("userId")
+
+Table: Backup
+Index: Backup_createdAt_idx
+Definition: CREATE INDEX "Backup_createdAt_idx" ON public."Backup" USING btree ("createdAt")
+
+Table: Backup
+Index: Backup_pkey
+Definition: CREATE UNIQUE INDEX "Backup_pkey" ON public."Backup" USING btree (id)
+
+Table: Backup
+Index: Backup_status_idx
+Definition: CREATE INDEX "Backup_status_idx" ON public."Backup" USING btree (status)
+
+Table: Backup
+Index: Backup_type_idx
+Definition: CREATE INDEX "Backup_type_idx" ON public."Backup" USING btree (type)
+
+Table: Campaign
+Index: Campaign_candidateId_key
+Definition: CREATE UNIQUE INDEX "Campaign_candidateId_key" ON public."Campaign" USING btree ("candidateId")
+
+Table: Campaign
+Index: Campaign_electionId_idx
+Definition: CREATE INDEX "Campaign_electionId_idx" ON public."Campaign" USING btree ("electionId")
+
+Table: Campaign
+Index: Campaign_isApproved_idx
+Definition: CREATE INDEX "Campaign_isApproved_idx" ON public."Campaign" USING btree ("isApproved")
+
+Table: Campaign
+Index: Campaign_pkey
+Definition: CREATE UNIQUE INDEX "Campaign_pkey" ON public."Campaign" USING btree (id)
+
+Table: Campaign
+Index: Campaign_status_idx
+Definition: CREATE INDEX "Campaign_status_idx" ON public."Campaign" USING btree (status)
+
+Table: Candidate
+Index: Candidate_approved_idx
+Definition: CREATE INDEX "Candidate_approved_idx" ON public."Candidate" USING btree ("electionId", "positionId", "createdAt") WHERE (status = 'APPROVED'::"CandidateStatus")
+
+Table: Candidate
+Index: Candidate_createdAt_idx
+Definition: CREATE INDEX "Candidate_createdAt_idx" ON public."Candidate" USING btree ("createdAt")
+
+Table: Candidate
+Index: Candidate_electionId_createdAt_idx
+Definition: CREATE INDEX "Candidate_electionId_createdAt_idx" ON public."Candidate" USING btree ("electionId", "createdAt")
+
+Table: Candidate
+Index: Candidate_electionId_idx
+Definition: CREATE INDEX "Candidate_electionId_idx" ON public."Candidate" USING btree ("electionId")
+
+Table: Candidate
+Index: Candidate_electionId_positionId_idx
+Definition: CREATE INDEX "Candidate_electionId_positionId_idx" ON public."Candidate" USING btree ("electionId", "positionId")
+
+Table: Candidate
+Index: Candidate_electionId_positionId_studentId_key
+Definition: CREATE UNIQUE INDEX "Candidate_electionId_positionId_studentId_key" ON public."Candidate" USING btree ("electionId", "positionId", "studentId")
+
+Table: Candidate
+Index: Candidate_electionId_status_idx
+Definition: CREATE INDEX "Candidate_electionId_status_idx" ON public."Candidate" USING btree ("electionId", status)
+
+Table: Candidate
+Index: Candidate_electionId_status_positionId_idx
+Definition: CREATE INDEX "Candidate_electionId_status_positionId_idx" ON public."Candidate" USING btree ("electionId", status, "positionId") WHERE (status = 'APPROVED'::"CandidateStatus")
+
+Table: Candidate
+Index: Candidate_pkey
+Definition: CREATE UNIQUE INDEX "Candidate_pkey" ON public."Candidate" USING btree (id)
+
+Table: Candidate
+Index: Candidate_positionId_idx
+Definition: CREATE INDEX "Candidate_positionId_idx" ON public."Candidate" USING btree ("positionId")
+
+Table: Candidate
+Index: Candidate_runningMateId_key
+Definition: CREATE UNIQUE INDEX "Candidate_runningMateId_key" ON public."Candidate" USING btree ("runningMateId")
+
+Table: Candidate
+Index: Candidate_status_createdAt_idx
+Definition: CREATE INDEX "Candidate_status_createdAt_idx" ON public."Candidate" USING btree (status, "createdAt")
+
+Table: Candidate
+Index: Candidate_status_electionId_idx
+Definition: CREATE INDEX "Candidate_status_electionId_idx" ON public."Candidate" USING btree (status, "electionId")
+
+Table: Candidate
+Index: Candidate_status_idx
+Definition: CREATE INDEX "Candidate_status_idx" ON public."Candidate" USING btree (status)
+
+Table: Candidate
+Index: Candidate_studentId_idx
+Definition: CREATE INDEX "Candidate_studentId_idx" ON public."Candidate" USING btree ("studentId")
+
+Table: CandidatePreRegistration
+Index: CandidatePreRegistration_approvalToken_idx
+Definition: CREATE INDEX "CandidatePreRegistration_approvalToken_idx" ON public."CandidatePreRegistration" USING btree ("approvalToken")
+
+Table: CandidatePreRegistration
+Index: CandidatePreRegistration_approvalToken_key
+Definition: CREATE UNIQUE INDEX "CandidatePreRegistration_approvalToken_key" ON public."CandidatePreRegistration" USING btree ("approvalToken")
+
+Table: CandidatePreRegistration
+Index: CandidatePreRegistration_createdAt_idx
+Definition: CREATE INDEX "CandidatePreRegistration_createdAt_idx" ON public."CandidatePreRegistration" USING btree ("createdAt")
+
+Table: CandidatePreRegistration
+Index: CandidatePreRegistration_electionId_idx
+Definition: CREATE INDEX "CandidatePreRegistration_electionId_idx" ON public."CandidatePreRegistration" USING btree ("electionId")
+
+Table: CandidatePreRegistration
+Index: CandidatePreRegistration_email_idx
+Definition: CREATE INDEX "CandidatePreRegistration_email_idx" ON public."CandidatePreRegistration" USING btree (email)
+
+Table: CandidatePreRegistration
+Index: CandidatePreRegistration_pkey
+Definition: CREATE UNIQUE INDEX "CandidatePreRegistration_pkey" ON public."CandidatePreRegistration" USING btree (id)
+
+Table: CandidatePreRegistration
+Index: CandidatePreRegistration_positionId_idx
+Definition: CREATE INDEX "CandidatePreRegistration_positionId_idx" ON public."CandidatePreRegistration" USING btree ("positionId")
+
+Table: CandidatePreRegistration
+Index: CandidatePreRegistration_status_idx
+Definition: CREATE INDEX "CandidatePreRegistration_status_idx" ON public."CandidatePreRegistration" USING btree (status)
+
+Table: CandidatePreRegistration
+Index: CandidatePreRegistration_studentId_idx
+Definition: CREATE INDEX "CandidatePreRegistration_studentId_idx" ON public."CandidatePreRegistration" USING btree ("studentId")
+
+Table: CryptoKey
+Index: CryptoKey_expiresAt_idx
+Definition: CREATE INDEX "CryptoKey_expiresAt_idx" ON public."CryptoKey" USING btree ("expiresAt")
+
+Table: CryptoKey
+Index: CryptoKey_isActive_idx
+Definition: CREATE INDEX "CryptoKey_isActive_idx" ON public."CryptoKey" USING btree ("isActive")
+
+Table: CryptoKey
+Index: CryptoKey_keyId_key
+Definition: CREATE UNIQUE INDEX "CryptoKey_keyId_key" ON public."CryptoKey" USING btree ("keyId")
+
+Table: CryptoKey
+Index: CryptoKey_keyType_idx
+Definition: CREATE INDEX "CryptoKey_keyType_idx" ON public."CryptoKey" USING btree ("keyType")
+
+Table: CryptoKey
+Index: CryptoKey_pkey
+Definition: CREATE UNIQUE INDEX "CryptoKey_pkey" ON public."CryptoKey" USING btree (id)
+
+Table: CryptoKey
+Index: CryptoKey_purpose_idx
+Definition: CREATE INDEX "CryptoKey_purpose_idx" ON public."CryptoKey" USING btree (purpose)
+
+Table: DashboardWidget
+Index: DashboardWidget_isVisible_idx
+Definition: CREATE INDEX "DashboardWidget_isVisible_idx" ON public."DashboardWidget" USING btree ("isVisible")
+
+Table: DashboardWidget
+Index: DashboardWidget_pkey
+Definition: CREATE UNIQUE INDEX "DashboardWidget_pkey" ON public."DashboardWidget" USING btree (id)
+
+Table: DashboardWidget
+Index: DashboardWidget_userId_idx
+Definition: CREATE INDEX "DashboardWidget_userId_idx" ON public."DashboardWidget" USING btree ("userId")
+
+Table: DashboardWidget
+Index: DashboardWidget_widgetType_idx
+Definition: CREATE INDEX "DashboardWidget_widgetType_idx" ON public."DashboardWidget" USING btree ("widgetType")
+
+Table: Election
+Index: Election_active_status_idx
+Definition: CREATE INDEX "Election_active_status_idx" ON public."Election" USING btree (status, "startDate", "endDate") WHERE (status = ANY (ARRAY['ACTIVE'::"ElectionStatus", 'SCHEDULED'::"ElectionStatus"]))
+
+Table: Election
+Index: Election_createdAt_idx
+Definition: CREATE INDEX "Election_createdAt_idx" ON public."Election" USING btree ("createdAt")
+
+Table: Election
+Index: Election_createdById_idx
+Definition: CREATE INDEX "Election_createdById_idx" ON public."Election" USING btree ("createdById")
+
+Table: Election
+Index: Election_endDate_idx
+Definition: CREATE INDEX "Election_endDate_idx" ON public."Election" USING btree ("endDate")
+
+Table: Election
+Index: Election_pkey
+Definition: CREATE UNIQUE INDEX "Election_pkey" ON public."Election" USING btree (id)
+
+Table: Election
+Index: Election_publishedAt_idx
+Definition: CREATE INDEX "Election_publishedAt_idx" ON public."Election" USING btree ("publishedAt")
+
+Table: Election
+Index: Election_startDate_endDate_idx
+Definition: CREATE INDEX "Election_startDate_endDate_idx" ON public."Election" USING btree ("startDate", "endDate")
+
+Table: Election
+Index: Election_startDate_idx
+Definition: CREATE INDEX "Election_startDate_idx" ON public."Election" USING btree ("startDate")
+
+Table: Election
+Index: Election_status_endDate_idx
+Definition: CREATE INDEX "Election_status_endDate_idx" ON public."Election" USING btree (status, "endDate")
+
+Table: Election
+Index: Election_status_endDate_startDate_idx
+Definition: CREATE INDEX "Election_status_endDate_startDate_idx" ON public."Election" USING btree (status, "endDate", "startDate")
+
+Table: Election
+Index: Election_status_idx
+Definition: CREATE INDEX "Election_status_idx" ON public."Election" USING btree (status)
+
+Table: Election
+Index: Election_status_startDate_endDate_idx
+Definition: CREATE INDEX "Election_status_startDate_endDate_idx" ON public."Election" USING btree (status, "startDate", "endDate")
+
+Table: Election
+Index: Election_status_startDate_idx
+Definition: CREATE INDEX "Election_status_startDate_idx" ON public."Election" USING btree (status, "startDate")
+
+Table: Election
+Index: Election_status_type_startDate_idx
+Definition: CREATE INDEX "Election_status_type_startDate_idx" ON public."Election" USING btree (status, type, "startDate")
+
+Table: Election
+Index: Election_type_idx
+Definition: CREATE INDEX "Election_type_idx" ON public."Election" USING btree (type)
+
+Table: Election
+Index: Election_type_status_idx
+Definition: CREATE INDEX "Election_type_status_idx" ON public."Election" USING btree (type, status)
+
+Table: Election
+Index: Election_type_status_startDate_idx
+Definition: CREATE INDEX "Election_type_status_startDate_idx" ON public."Election" USING btree (type, status, "startDate")
+
+Table: Election
+Index: Election_updatedAt_idx
+Definition: CREATE INDEX "Election_updatedAt_idx" ON public."Election" USING btree ("updatedAt")
+
+Table: ElectionNotification
+Index: ElectionNotification_electionId_idx
+Definition: CREATE INDEX "ElectionNotification_electionId_idx" ON public."ElectionNotification" USING btree ("electionId")
+
+Table: ElectionNotification
+Index: ElectionNotification_electionId_sent_scheduledFor_idx
+Definition: CREATE INDEX "ElectionNotification_electionId_sent_scheduledFor_idx" ON public."ElectionNotification" USING btree ("electionId", sent, "scheduledFor")
+
+Table: ElectionNotification
+Index: ElectionNotification_pkey
+Definition: CREATE UNIQUE INDEX "ElectionNotification_pkey" ON public."ElectionNotification" USING btree (id)
+
+Table: ElectionNotification
+Index: ElectionNotification_scheduledFor_idx
+Definition: CREATE INDEX "ElectionNotification_scheduledFor_idx" ON public."ElectionNotification" USING btree ("scheduledFor")
+
+Table: ElectionNotification
+Index: ElectionNotification_scheduledFor_sent_idx
+Definition: CREATE INDEX "ElectionNotification_scheduledFor_sent_idx" ON public."ElectionNotification" USING btree ("scheduledFor", sent)
+
+Table: ElectionNotification
+Index: ElectionNotification_sent_idx
+Definition: CREATE INDEX "ElectionNotification_sent_idx" ON public."ElectionNotification" USING btree (sent)
+
+Table: ElectionNotification
+Index: ElectionNotification_sent_scheduledFor_idx
+Definition: CREATE INDEX "ElectionNotification_sent_scheduledFor_idx" ON public."ElectionNotification" USING btree (sent, "scheduledFor")
+
+Table: ElectionNotification
+Index: ElectionNotification_sent_scheduledFor_type_idx
+Definition: CREATE INDEX "ElectionNotification_sent_scheduledFor_type_idx" ON public."ElectionNotification" USING btree (sent, "scheduledFor", type)
+
+Table: ElectionNotification
+Index: ElectionNotification_type_idx
+Definition: CREATE INDEX "ElectionNotification_type_idx" ON public."ElectionNotification" USING btree (type)
+
+Table: ElectionNotification
+Index: ElectionNotification_unsent_idx
+Definition: CREATE INDEX "ElectionNotification_unsent_idx" ON public."ElectionNotification" USING btree ("scheduledFor", "electionId") WHERE (sent = false)
+
+Table: File
+Index: File_category_idx
+Definition: CREATE INDEX "File_category_idx" ON public."File" USING btree (category)
+
+Table: File
+Index: File_createdAt_idx
+Definition: CREATE INDEX "File_createdAt_idx" ON public."File" USING btree ("createdAt")
+
+Table: File
+Index: File_filename_idx
+Definition: CREATE INDEX "File_filename_idx" ON public."File" USING btree (filename)
+
+Table: File
+Index: File_filename_key
+Definition: CREATE UNIQUE INDEX "File_filename_key" ON public."File" USING btree (filename)
+
+Table: File
+Index: File_mimeType_idx
+Definition: CREATE INDEX "File_mimeType_idx" ON public."File" USING btree ("mimeType")
+
+Table: File
+Index: File_pkey
+Definition: CREATE UNIQUE INDEX "File_pkey" ON public."File" USING btree (id)
+
+Table: File
+Index: File_uploadedById_idx
+Definition: CREATE INDEX "File_uploadedById_idx" ON public."File" USING btree ("uploadedById")
+
+Table: FileMetadata
+Index: FileMetadata_contentType_idx
+Definition: CREATE INDEX "FileMetadata_contentType_idx" ON public."FileMetadata" USING btree ("contentType")
+
+Table: FileMetadata
+Index: FileMetadata_fileId_key
+Definition: CREATE UNIQUE INDEX "FileMetadata_fileId_key" ON public."FileMetadata" USING btree ("fileId")
+
+Table: FileMetadata
+Index: FileMetadata_pkey
+Definition: CREATE UNIQUE INDEX "FileMetadata_pkey" ON public."FileMetadata" USING btree (id)
+
+Table: FileMetadata
+Index: FileMetadata_processingStatus_idx
+Definition: CREATE INDEX "FileMetadata_processingStatus_idx" ON public."FileMetadata" USING btree ("processingStatus")
+
+Table: FileMetadata
+Index: FileMetadata_virusScanStatus_idx
+Definition: CREATE INDEX "FileMetadata_virusScanStatus_idx" ON public."FileMetadata" USING btree ("virusScanStatus")
+
+Table: GeneratedReport
+Index: GeneratedReport_generatedAt_idx
+Definition: CREATE INDEX "GeneratedReport_generatedAt_idx" ON public."GeneratedReport" USING btree ("generatedAt")
+
+Table: GeneratedReport
+Index: GeneratedReport_pkey
+Definition: CREATE UNIQUE INDEX "GeneratedReport_pkey" ON public."GeneratedReport" USING btree (id)
+
+Table: GeneratedReport
+Index: GeneratedReport_requestedById_idx
+Definition: CREATE INDEX "GeneratedReport_requestedById_idx" ON public."GeneratedReport" USING btree ("requestedById")
+
+Table: GeneratedReport
+Index: GeneratedReport_status_idx
+Definition: CREATE INDEX "GeneratedReport_status_idx" ON public."GeneratedReport" USING btree (status)
+
+Table: GeneratedReport
+Index: GeneratedReport_type_idx
+Definition: CREATE INDEX "GeneratedReport_type_idx" ON public."GeneratedReport" USING btree (type)
+
+Table: IssueReport
+Index: IssueReport_category_idx
+Definition: CREATE INDEX "IssueReport_category_idx" ON public."IssueReport" USING btree (category)
+
+Table: IssueReport
+Index: IssueReport_createdAt_idx
+Definition: CREATE INDEX "IssueReport_createdAt_idx" ON public."IssueReport" USING btree ("createdAt")
+
+Table: IssueReport
+Index: IssueReport_pkey
+Definition: CREATE UNIQUE INDEX "IssueReport_pkey" ON public."IssueReport" USING btree (id)
+
+Table: IssueReport
+Index: IssueReport_priority_idx
+Definition: CREATE INDEX "IssueReport_priority_idx" ON public."IssueReport" USING btree (priority)
+
+Table: IssueReport
+Index: IssueReport_reportedBy_idx
+Definition: CREATE INDEX "IssueReport_reportedBy_idx" ON public."IssueReport" USING btree ("reportedBy")
+
+Table: IssueReport
+Index: IssueReport_status_idx
+Definition: CREATE INDEX "IssueReport_status_idx" ON public."IssueReport" USING btree (status)
+
+Table: Notification
+Index: Notification_createdAt_idx
+Definition: CREATE INDEX "Notification_createdAt_idx" ON public."Notification" USING btree ("createdAt")
+
+Table: Notification
+Index: Notification_pkey
+Definition: CREATE UNIQUE INDEX "Notification_pkey" ON public."Notification" USING btree (id)
+
+Table: Notification
+Index: Notification_priority_read_idx
+Definition: CREATE INDEX "Notification_priority_read_idx" ON public."Notification" USING btree (priority, read, "createdAt" DESC)
+
+Table: Notification
+Index: Notification_unread_userId_idx
+Definition: CREATE INDEX "Notification_unread_userId_idx" ON public."Notification" USING btree ("userId", "createdAt" DESC) WHERE (read = false)
+
+Table: Notification
+Index: Notification_userId_read_createdAt_idx
+Definition: CREATE INDEX "Notification_userId_read_createdAt_idx" ON public."Notification" USING btree ("userId", read, "createdAt" DESC)
+
+Table: Notification
+Index: Notification_userId_read_idx
+Definition: CREATE INDEX "Notification_userId_read_idx" ON public."Notification" USING btree ("userId", read)
+
+Table: Position
+Index: Position_electionId_idx
+Definition: CREATE INDEX "Position_electionId_idx" ON public."Position" USING btree ("electionId")
+
+Table: Position
+Index: Position_electionId_name_key
+Definition: CREATE UNIQUE INDEX "Position_electionId_name_key" ON public."Position" USING btree ("electionId", name)
+
+Table: Position
+Index: Position_electionId_order_id_idx
+Definition: CREATE INDEX "Position_electionId_order_id_idx" ON public."Position" USING btree ("electionId", "order", id)
+
+Table: Position
+Index: Position_pkey
+Definition: CREATE UNIQUE INDEX "Position_pkey" ON public."Position" USING btree (id)
+
+Table: RefreshToken
+Index: RefreshToken_expiresAt_revokedAt_idx
+Definition: CREATE INDEX "RefreshToken_expiresAt_revokedAt_idx" ON public."RefreshToken" USING btree ("expiresAt", "revokedAt")
+
+Table: RefreshToken
+Index: RefreshToken_pkey
+Definition: CREATE UNIQUE INDEX "RefreshToken_pkey" ON public."RefreshToken" USING btree (id)
+
+Table: RefreshToken
+Index: RefreshToken_token_idx
+Definition: CREATE INDEX "RefreshToken_token_idx" ON public."RefreshToken" USING btree (token)
+
+Table: RefreshToken
+Index: RefreshToken_token_key
+Definition: CREATE UNIQUE INDEX "RefreshToken_token_key" ON public."RefreshToken" USING btree (token)
+
+Table: RefreshToken
+Index: RefreshToken_userId_active_idx
+Definition: CREATE INDEX "RefreshToken_userId_active_idx" ON public."RefreshToken" USING btree ("userId", "expiresAt") WHERE ("revokedAt" IS NULL)
+
+Table: RefreshToken
+Index: RefreshToken_userId_expiresAt_idx
+Definition: CREATE INDEX "RefreshToken_userId_expiresAt_idx" ON public."RefreshToken" USING btree ("userId", "expiresAt")
+
+Table: RefreshToken
+Index: RefreshToken_userId_idx
+Definition: CREATE INDEX "RefreshToken_userId_idx" ON public."RefreshToken" USING btree ("userId")
+
+Table: RefreshToken
+Index: RefreshToken_userId_revokedAt_expiresAt_idx
+Definition: CREATE INDEX "RefreshToken_userId_revokedAt_expiresAt_idx" ON public."RefreshToken" USING btree ("userId", "revokedAt", "expiresAt")
+
+Table: ReportTemplate
+Index: ReportTemplate_createdById_idx
+Definition: CREATE INDEX "ReportTemplate_createdById_idx" ON public."ReportTemplate" USING btree ("createdById")
+
+Table: ReportTemplate
+Index: ReportTemplate_isScheduled_idx
+Definition: CREATE INDEX "ReportTemplate_isScheduled_idx" ON public."ReportTemplate" USING btree ("isScheduled")
+
+Table: ReportTemplate
+Index: ReportTemplate_pkey
+Definition: CREATE UNIQUE INDEX "ReportTemplate_pkey" ON public."ReportTemplate" USING btree (id)
+
+Table: ReportTemplate
+Index: ReportTemplate_type_idx
+Definition: CREATE INDEX "ReportTemplate_type_idx" ON public."ReportTemplate" USING btree (type)
+
+Table: Result
+Index: Result_electionId_positionId_candidateId_key
+Definition: CREATE UNIQUE INDEX "Result_electionId_positionId_candidateId_key" ON public."Result" USING btree ("electionId", "positionId", "candidateId")
+
+Table: Result
+Index: Result_electionId_positionId_idx
+Definition: CREATE INDEX "Result_electionId_positionId_idx" ON public."Result" USING btree ("electionId", "positionId")
+
+Table: Result
+Index: Result_pkey
+Definition: CREATE UNIQUE INDEX "Result_pkey" ON public."Result" USING btree (id)
+
+Table: SecurityEvent
+Index: SecurityEvent_createdAt_idx
+Definition: CREATE INDEX "SecurityEvent_createdAt_idx" ON public."SecurityEvent" USING btree ("createdAt")
+
+Table: SecurityEvent
+Index: SecurityEvent_pkey
+Definition: CREATE UNIQUE INDEX "SecurityEvent_pkey" ON public."SecurityEvent" USING btree (id)
+
+Table: SecurityEvent
+Index: SecurityEvent_resolved_idx
+Definition: CREATE INDEX "SecurityEvent_resolved_idx" ON public."SecurityEvent" USING btree (resolved)
+
+Table: SecurityEvent
+Index: SecurityEvent_severity_idx
+Definition: CREATE INDEX "SecurityEvent_severity_idx" ON public."SecurityEvent" USING btree (severity)
+
+Table: SecurityEvent
+Index: SecurityEvent_type_idx
+Definition: CREATE INDEX "SecurityEvent_type_idx" ON public."SecurityEvent" USING btree (type)
+
+Table: SecurityEvent
+Index: SecurityEvent_userId_idx
+Definition: CREATE INDEX "SecurityEvent_userId_idx" ON public."SecurityEvent" USING btree ("userId")
+
+Table: SecurityHash
+Index: SecurityHash_blockNumber_idx
+Definition: CREATE INDEX "SecurityHash_blockNumber_idx" ON public."SecurityHash" USING btree ("blockNumber")
+
+Table: SecurityHash
+Index: SecurityHash_entityType_entityId_idx
+Definition: CREATE INDEX "SecurityHash_entityType_entityId_idx" ON public."SecurityHash" USING btree ("entityType", "entityId")
+
+Table: SecurityHash
+Index: SecurityHash_hashValue_idx
+Definition: CREATE INDEX "SecurityHash_hashValue_idx" ON public."SecurityHash" USING btree ("hashValue")
+
+Table: SecurityHash
+Index: SecurityHash_hashValue_key
+Definition: CREATE UNIQUE INDEX "SecurityHash_hashValue_key" ON public."SecurityHash" USING btree ("hashValue")
+
+Table: SecurityHash
+Index: SecurityHash_pkey
+Definition: CREATE UNIQUE INDEX "SecurityHash_pkey" ON public."SecurityHash" USING btree (id)
+
+Table: SecurityHash
+Index: SecurityHash_verified_idx
+Definition: CREATE INDEX "SecurityHash_verified_idx" ON public."SecurityHash" USING btree (verified)
+
+Table: SocialMedia
+Index: SocialMedia_pkey
+Definition: CREATE UNIQUE INDEX "SocialMedia_pkey" ON public."SocialMedia" USING btree (id)
+
+Table: SocialMedia
+Index: SocialMedia_platform_idx
+Definition: CREATE INDEX "SocialMedia_platform_idx" ON public."SocialMedia" USING btree (platform)
+
+Table: SocialMedia
+Index: SocialMedia_userId_idx
+Definition: CREATE INDEX "SocialMedia_userId_idx" ON public."SocialMedia" USING btree ("userId")
+
+Table: SocialMedia
+Index: SocialMedia_userId_platform_key
+Definition: CREATE UNIQUE INDEX "SocialMedia_userId_platform_key" ON public."SocialMedia" USING btree ("userId", platform)
+
+Table: SystemConfig
+Index: SystemConfig_category_idx
+Definition: CREATE INDEX "SystemConfig_category_idx" ON public."SystemConfig" USING btree (category)
+
+Table: SystemConfig
+Index: SystemConfig_key_key
+Definition: CREATE UNIQUE INDEX "SystemConfig_key_key" ON public."SystemConfig" USING btree (key)
+
+Table: SystemConfig
+Index: SystemConfig_pkey
+Definition: CREATE UNIQUE INDEX "SystemConfig_pkey" ON public."SystemConfig" USING btree (id)
+
+Table: SystemStats
+Index: SystemStats_expiresAt_idx
+Definition: CREATE INDEX "SystemStats_expiresAt_idx" ON public."SystemStats" USING btree ("expiresAt")
+
+Table: SystemStats
+Index: SystemStats_key_idx
+Definition: CREATE INDEX "SystemStats_key_idx" ON public."SystemStats" USING btree (key)
+
+Table: SystemStats
+Index: SystemStats_key_key
+Definition: CREATE UNIQUE INDEX "SystemStats_key_key" ON public."SystemStats" USING btree (key)
+
+Table: SystemStats
+Index: SystemStats_pkey
+Definition: CREATE UNIQUE INDEX "SystemStats_pkey" ON public."SystemStats" USING btree (id)
+
+Table: Task
+Index: Task_assignedBy_idx
+Definition: CREATE INDEX "Task_assignedBy_idx" ON public."Task" USING btree ("assignedBy")
+
+Table: Task
+Index: Task_assignedTo_idx
+Definition: CREATE INDEX "Task_assignedTo_idx" ON public."Task" USING btree ("assignedTo")
+
+Table: Task
+Index: Task_dueDate_idx
+Definition: CREATE INDEX "Task_dueDate_idx" ON public."Task" USING btree ("dueDate")
+
+Table: Task
+Index: Task_entityType_entityId_idx
+Definition: CREATE INDEX "Task_entityType_entityId_idx" ON public."Task" USING btree ("entityType", "entityId")
+
+Table: Task
+Index: Task_pkey
+Definition: CREATE UNIQUE INDEX "Task_pkey" ON public."Task" USING btree (id)
+
+Table: Task
+Index: Task_status_idx
+Definition: CREATE INDEX "Task_status_idx" ON public."Task" USING btree (status)
+
+Table: Task
+Index: Task_type_idx
+Definition: CREATE INDEX "Task_type_idx" ON public."Task" USING btree (type)
+
+Table: User
+Index: User_course_yearOfStudy_isActive_idx
+Definition: CREATE INDEX "User_course_yearOfStudy_isActive_idx" ON public."User" USING btree (course, "yearOfStudy", "isActive", "isVerified")
+
+Table: User
+Index: User_createdAt_idx
+Definition: CREATE INDEX "User_createdAt_idx" ON public."User" USING btree ("createdAt")
+
+Table: User
+Index: User_department_idx
+Definition: CREATE INDEX "User_department_idx" ON public."User" USING btree (department)
+
+Table: User
+Index: User_department_isActive_isVerified_idx
+Definition: CREATE INDEX "User_department_isActive_isVerified_idx" ON public."User" USING btree (department, "isActive", "isVerified")
+
+Table: User
+Index: User_email_idx
+Definition: CREATE INDEX "User_email_idx" ON public."User" USING btree (email)
+
+Table: User
+Index: User_email_isActive_idx
+Definition: CREATE INDEX "User_email_isActive_idx" ON public."User" USING btree (email, "isActive")
+
+Table: User
+Index: User_email_key
+Definition: CREATE UNIQUE INDEX "User_email_key" ON public."User" USING btree (email)
+
+Table: User
+Index: User_faculty_department_yearOfStudy_isActive_idx
+Definition: CREATE INDEX "User_faculty_department_yearOfStudy_isActive_idx" ON public."User" USING btree (faculty, department, "yearOfStudy", "isActive", "isVerified")
+
+Table: User
+Index: User_faculty_idx
+Definition: CREATE INDEX "User_faculty_idx" ON public."User" USING btree (faculty)
+
+Table: User
+Index: User_faculty_isActive_isVerified_idx
+Definition: CREATE INDEX "User_faculty_isActive_isVerified_idx" ON public."User" USING btree (faculty, "isActive", "isVerified")
+
+Table: User
+Index: User_isActive_idx
+Definition: CREATE INDEX "User_isActive_idx" ON public."User" USING btree ("isActive")
+
+Table: User
+Index: User_isActive_isVerified_department_idx
+Definition: CREATE INDEX "User_isActive_isVerified_department_idx" ON public."User" USING btree ("isActive", "isVerified", department)
+
+Table: User
+Index: User_isActive_isVerified_faculty_idx
+Definition: CREATE INDEX "User_isActive_isVerified_faculty_idx" ON public."User" USING btree ("isActive", "isVerified", faculty)
+
+Table: User
+Index: User_isActive_isVerified_idx
+Definition: CREATE INDEX "User_isActive_isVerified_idx" ON public."User" USING btree ("isActive", "isVerified")
+
+Table: User
+Index: User_isVerified_idx
+Definition: CREATE INDEX "User_isVerified_idx" ON public."User" USING btree ("isVerified")
+
+Table: User
+Index: User_lastLogin_idx
+Definition: CREATE INDEX "User_lastLogin_idx" ON public."User" USING btree ("lastLogin")
+
+Table: User
+Index: User_lastLogin_role_idx
+Definition: CREATE INDEX "User_lastLogin_role_idx" ON public."User" USING btree ("lastLogin", role)
+
+Table: User
+Index: User_lockedUntil_isActive_idx
+Definition: CREATE INDEX "User_lockedUntil_isActive_idx" ON public."User" USING btree ("lockedUntil", "isActive")
+
+Table: User
+Index: User_pkey
+Definition: CREATE UNIQUE INDEX "User_pkey" ON public."User" USING btree (id)
+
+Table: User
+Index: User_role_createdAt_idx
+Definition: CREATE INDEX "User_role_createdAt_idx" ON public."User" USING btree (role, "createdAt")
+
+Table: User
+Index: User_role_idx
+Definition: CREATE INDEX "User_role_idx" ON public."User" USING btree (role)
+
+Table: User
+Index: User_role_isActive_idx
+Definition: CREATE INDEX "User_role_isActive_idx" ON public."User" USING btree (role, "isActive")
+
+Table: User
+Index: User_role_isVerified_idx
+Definition: CREATE INDEX "User_role_isVerified_idx" ON public."User" USING btree (role, "isVerified")
+
+Table: User
+Index: User_studentId_idx
+Definition: CREATE INDEX "User_studentId_idx" ON public."User" USING btree ("studentId")
+
+Table: User
+Index: User_studentId_isActive_idx
+Definition: CREATE INDEX "User_studentId_isActive_idx" ON public."User" USING btree ("studentId", "isActive")
+
+Table: User
+Index: User_studentId_key
+Definition: CREATE UNIQUE INDEX "User_studentId_key" ON public."User" USING btree ("studentId")
+
+Table: User
+Index: User_yearOfStudy_idx
+Definition: CREATE INDEX "User_yearOfStudy_idx" ON public."User" USING btree ("yearOfStudy")
+
+Table: UserAchievement
+Index: UserAchievement_achievementId_idx
+Definition: CREATE INDEX "UserAchievement_achievementId_idx" ON public."UserAchievement" USING btree ("achievementId")
+
+Table: UserAchievement
+Index: UserAchievement_completed_idx
+Definition: CREATE INDEX "UserAchievement_completed_idx" ON public."UserAchievement" USING btree (completed)
+
+Table: UserAchievement
+Index: UserAchievement_pkey
+Definition: CREATE UNIQUE INDEX "UserAchievement_pkey" ON public."UserAchievement" USING btree (id)
+
+Table: UserAchievement
+Index: UserAchievement_userId_achievementId_key
+Definition: CREATE UNIQUE INDEX "UserAchievement_userId_achievementId_key" ON public."UserAchievement" USING btree ("userId", "achievementId")
+
+Table: UserAchievement
+Index: UserAchievement_userId_idx
+Definition: CREATE INDEX "UserAchievement_userId_idx" ON public."UserAchievement" USING btree ("userId")
+
+Table: UserPreferences
+Index: UserPreferences_pkey
+Definition: CREATE UNIQUE INDEX "UserPreferences_pkey" ON public."UserPreferences" USING btree (id)
+
+Table: UserPreferences
+Index: UserPreferences_userId_idx
+Definition: CREATE INDEX "UserPreferences_userId_idx" ON public."UserPreferences" USING btree ("userId")
+
+Table: UserPreferences
+Index: UserPreferences_userId_key
+Definition: CREATE UNIQUE INDEX "UserPreferences_userId_key" ON public."UserPreferences" USING btree ("userId")
+
+Table: VerificationToken
+Index: VerificationToken_pkey
+Definition: CREATE UNIQUE INDEX "VerificationToken_pkey" ON public."VerificationToken" USING btree (id)
+
+Table: VerificationToken
+Index: VerificationToken_token_idx
+Definition: CREATE INDEX "VerificationToken_token_idx" ON public."VerificationToken" USING btree (token)
+
+Table: VerificationToken
+Index: VerificationToken_token_key
+Definition: CREATE UNIQUE INDEX "VerificationToken_token_key" ON public."VerificationToken" USING btree (token)
+
+Table: VerificationToken
+Index: VerificationToken_userId_idx
+Definition: CREATE INDEX "VerificationToken_userId_idx" ON public."VerificationToken" USING btree ("userId")
+
+Table: Vote
+Index: Vote_castAt_idx
+Definition: CREATE INDEX "Vote_castAt_idx" ON public."Vote" USING btree ("castAt")
+
+Table: Vote
+Index: Vote_electionId_castAt_idx
+Definition: CREATE INDEX "Vote_electionId_castAt_idx" ON public."Vote" USING btree ("electionId", "castAt")
+
+Table: Vote
+Index: Vote_electionId_idx
+Definition: CREATE INDEX "Vote_electionId_idx" ON public."Vote" USING btree ("electionId")
+
+Table: Vote
+Index: Vote_electionId_positionId_candidateId_idx
+Definition: CREATE INDEX "Vote_electionId_positionId_candidateId_idx" ON public."Vote" USING btree ("electionId", "positionId", "candidateId") WHERE ("isAbstain" = false)
+
+Table: Vote
+Index: Vote_electionId_positionId_idx
+Definition: CREATE INDEX "Vote_electionId_positionId_idx" ON public."Vote" USING btree ("electionId", "positionId")
+
+Table: Vote
+Index: Vote_electionId_positionId_voterId_key
+Definition: CREATE UNIQUE INDEX "Vote_electionId_positionId_voterId_key" ON public."Vote" USING btree ("electionId", "positionId", "voterId")
+
+Table: Vote
+Index: Vote_electionId_voterId_castAt_idx
+Definition: CREATE INDEX "Vote_electionId_voterId_castAt_idx" ON public."Vote" USING btree ("electionId", "voterId", "castAt")
+
+Table: Vote
+Index: Vote_electionId_voterId_idx
+Definition: CREATE INDEX "Vote_electionId_voterId_idx" ON public."Vote" USING btree ("electionId", "voterId")
+
+Table: Vote
+Index: Vote_pkey
+Definition: CREATE UNIQUE INDEX "Vote_pkey" ON public."Vote" USING btree (id)
+
+Table: Vote
+Index: Vote_verificationCode_key
+Definition: CREATE UNIQUE INDEX "Vote_verificationCode_key" ON public."Vote" USING btree ("verificationCode")
+
+Table: Vote
+Index: Vote_verified_idx
+Definition: CREATE INDEX "Vote_verified_idx" ON public."Vote" USING btree (verified)
+
+Table: Vote
+Index: Vote_voteHash_idx
+Definition: CREATE INDEX "Vote_voteHash_idx" ON public."Vote" USING btree ("voteHash")
+
+Table: Vote
+Index: Vote_voteHash_key
+Definition: CREATE UNIQUE INDEX "Vote_voteHash_key" ON public."Vote" USING btree ("voteHash")
+
+Table: Vote
+Index: Vote_voterId_castAt_idx
+Definition: CREATE INDEX "Vote_voterId_castAt_idx" ON public."Vote" USING btree ("voterId", "castAt")
+
+Table: Vote
+Index: Vote_voterId_idx
+Definition: CREATE INDEX "Vote_voterId_idx" ON public."Vote" USING btree ("voterId")
+
+Table: VoterEligibility
+Index: VoterEligibility_electionId_idx
+Definition: CREATE INDEX "VoterEligibility_electionId_idx" ON public."VoterEligibility" USING btree ("electionId")
+
+Table: VoterEligibility
+Index: VoterEligibility_electionId_userId_addedAt_idx
+Definition: CREATE INDEX "VoterEligibility_electionId_userId_addedAt_idx" ON public."VoterEligibility" USING btree ("electionId", "userId", "addedAt")
+
+Table: VoterEligibility
+Index: VoterEligibility_electionId_userId_key
+Definition: CREATE UNIQUE INDEX "VoterEligibility_electionId_userId_key" ON public."VoterEligibility" USING btree ("electionId", "userId")
+
+Table: VoterEligibility
+Index: VoterEligibility_pkey
+Definition: CREATE UNIQUE INDEX "VoterEligibility_pkey" ON public."VoterEligibility" USING btree (id)
+
+Table: VoterEligibility
+Index: VoterEligibility_userId_idx
+Definition: CREATE INDEX "VoterEligibility_userId_idx" ON public."VoterEligibility" USING btree ("userId")
+
+Table: VotingSession
+Index: VotingSession_electionId_idx
+Definition: CREATE INDEX "VotingSession_electionId_idx" ON public."VotingSession" USING btree ("electionId")
+
+Table: VotingSession
+Index: VotingSession_pkey
+Definition: CREATE UNIQUE INDEX "VotingSession_pkey" ON public."VotingSession" USING btree (id)
+
+Table: VotingSession
+Index: VotingSession_sessionToken_idx
+Definition: CREATE INDEX "VotingSession_sessionToken_idx" ON public."VotingSession" USING btree ("sessionToken")
+
+Table: VotingSession
+Index: VotingSession_sessionToken_key
+Definition: CREATE UNIQUE INDEX "VotingSession_sessionToken_key" ON public."VotingSession" USING btree ("sessionToken")
+
+Table: VotingSession
+Index: VotingSession_status_idx
+Definition: CREATE INDEX "VotingSession_status_idx" ON public."VotingSession" USING btree (status)
+
+Table: VotingSession
+Index: VotingSession_voterId_electionId_idx
+Definition: CREATE INDEX "VotingSession_voterId_electionId_idx" ON public."VotingSession" USING btree ("voterId", "electionId")
+
+Table: VotingSession
+Index: VotingSession_voterId_idx
+Definition: CREATE INDEX "VotingSession_voterId_idx" ON public."VotingSession" USING btree ("voterId")
+
+Table: WebSocketConnection
+Index: WebSocketConnection_connectedAt_idx
+Definition: CREATE INDEX "WebSocketConnection_connectedAt_idx" ON public."WebSocketConnection" USING btree ("connectedAt")
+
+Table: WebSocketConnection
+Index: WebSocketConnection_connectionId_key
+Definition: CREATE UNIQUE INDEX "WebSocketConnection_connectionId_key" ON public."WebSocketConnection" USING btree ("connectionId")
+
+Table: WebSocketConnection
+Index: WebSocketConnection_pkey
+Definition: CREATE UNIQUE INDEX "WebSocketConnection_pkey" ON public."WebSocketConnection" USING btree (id)
+
+Table: WebSocketConnection
+Index: WebSocketConnection_roomId_idx
+Definition: CREATE INDEX "WebSocketConnection_roomId_idx" ON public."WebSocketConnection" USING btree ("roomId")
+
+Table: WebSocketConnection
+Index: WebSocketConnection_status_idx
+Definition: CREATE INDEX "WebSocketConnection_status_idx" ON public."WebSocketConnection" USING btree (status)
+
+Table: WebSocketConnection
+Index: WebSocketConnection_userId_idx
+Definition: CREATE INDEX "WebSocketConnection_userId_idx" ON public."WebSocketConnection" USING btree ("userId")
+
+Table: _CandidateBanner
+Index: _CandidateBanner_AB_unique
+Definition: CREATE UNIQUE INDEX "_CandidateBanner_AB_unique" ON public."_CandidateBanner" USING btree ("A", "B")
+
+Table: _CandidateBanner
+Index: _CandidateBanner_B_index
+Definition: CREATE INDEX "_CandidateBanner_B_index" ON public."_CandidateBanner" USING btree ("B")
+
+Table: _CandidateManifesto
+Index: _CandidateManifesto_AB_unique
+Definition: CREATE UNIQUE INDEX "_CandidateManifesto_AB_unique" ON public."_CandidateManifesto" USING btree ("A", "B")
+
+Table: _CandidateManifesto
+Index: _CandidateManifesto_B_index
+Definition: CREATE INDEX "_CandidateManifesto_B_index" ON public."_CandidateManifesto" USING btree ("B")
+
+Table: _CandidatePhoto
+Index: _CandidatePhoto_AB_unique
+Definition: CREATE UNIQUE INDEX "_CandidatePhoto_AB_unique" ON public."_CandidatePhoto" USING btree ("A", "B")
+
+Table: _CandidatePhoto
+Index: _CandidatePhoto_B_index
+Definition: CREATE INDEX "_CandidatePhoto_B_index" ON public."_CandidatePhoto" USING btree ("B")
+
+Table: _ElectionAdmin
+Index: _ElectionAdmin_AB_unique
+Definition: CREATE UNIQUE INDEX "_ElectionAdmin_AB_unique" ON public."_ElectionAdmin" USING btree ("A", "B")
+
+Table: _ElectionAdmin
+Index: _ElectionAdmin_B_index
+Definition: CREATE INDEX "_ElectionAdmin_B_index" ON public."_ElectionAdmin" USING btree ("B")
+
+Table: _ElectionCover
+Index: _ElectionCover_AB_unique
+Definition: CREATE UNIQUE INDEX "_ElectionCover_AB_unique" ON public."_ElectionCover" USING btree ("A", "B")
+
+Table: _ElectionCover
+Index: _ElectionCover_B_index
+Definition: CREATE INDEX "_ElectionCover_B_index" ON public."_ElectionCover" USING btree ("B")
+
+Table: _ProfileImage
+Index: _ProfileImage_AB_unique
+Definition: CREATE UNIQUE INDEX "_ProfileImage_AB_unique" ON public."_ProfileImage" USING btree ("A", "B")
+
+Table: _ProfileImage
+Index: _ProfileImage_B_index
+Definition: CREATE INDEX "_ProfileImage_B_index" ON public."_ProfileImage" USING btree ("B")
+
+
+========================================
+TABLE SIZES
+========================================
+
+User: 448 kB
+Election: 304 kB
+AuditLog: 216 kB
+RefreshToken: 176 kB
+ElectionNotification: 176 kB
+CandidatePreRegistration: 160 kB
+Candidate: 128 kB
+Vote: 128 kB
+Notification: 112 kB
+Position: 80 kB
+SystemStats: 80 kB
+VerificationToken: 80 kB
+File: 64 kB
+VotingSession: 64 kB
+SystemConfig: 64 kB
+Task: 64 kB
+CryptoKey: 56 kB
+SecurityHash: 56 kB
+Analytics: 56 kB
+IssueReport: 56 kB
+
+========================================
+SYSTEMSTATS DATA
+========================================
+
+active_elections: {"count":0,"timestamp":"2025-11-13T18:40:13.752352+00:00"}
+active_users: {"count":3,"timestamp":"2025-11-12T10:24:04.691671+00:00"}
+approved_candidates: {"count":0,"timestamp":"2025-11-12T10:24:04.691671+00:00"}
+completed_elections: {"count":2,"timestamp":"2025-11-13T18:40:13.752352+00:00"}
+draft_elections: {"count":0,"timestamp":"2025-11-12T10:24:04.691671+00:00"}
+pending_candidates: {"count":0,"timestamp":"2025-11-12T10:24:04.691671+00:00"}
+scheduled_elections: {"count":0,"timestamp":"2025-11-12T10:24:04.691671+00:00"}
+total_candidates: {"count":0,"timestamp":"2025-11-12T10:24:04.691671+00:00"}
+total_elections: {"count":2,"timestamp":"2025-11-12T10:24:04.691671+00:00"}
+total_users: {"count":3,"timestamp":"2025-11-12T10:24:04.691671+00:00"}
+total_votes: {"count":0,"timestamp":"2025-11-12T10:24:04.691671+00:00"}
+verified_users: {"count":2,"timestamp":"2025-11-12T10:24:04.691671+00:00"}
+
+========================================
+RECORD COUNTS
+========================================
+
+Users: 3
+Elections: 2
+Votes: 0
+Candidates: 0
+Positions: 8
+Notifications: 8

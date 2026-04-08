@@ -1,0 +1,299 @@
+==============================================================================
+API Test Results - Auth, Admin, and Audit Modules
+Test Run: Wed, Oct 22, 2025  7:52:10 PM
+==============================================================================
+
+✗ FAILED - Register new user
+  Method: POST
+  Endpoint: /auth/register
+  Status Code: 409
+  Expected: 201/200
+  Response: {"success":false,"error":{"message":"An account with this student ID already exists","statusCode":409,"stack":"Error: An account with this student ID already exists\n    at AuthService.register (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\services\\auth.service.js:61:23)\n    at async register (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\controllers\\auth.controller.js:29:28)"}}
+  Method: POST
+  Endpoint: /auth/register
+  Status Code: 409
+
+✗ FAILED - User login
+  Method: POST
+  Endpoint: /auth/login
+  Status Code: 401
+  Expected: 200
+  Response: {"success":false,"error":{"message":"Invalid credentials","statusCode":401,"stack":"Error: Invalid credentials\n    at AuthService.login (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\services\\auth.service.js:170:23)\n    at async login (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\controllers\\auth.controller.js:61:28)"}}
+  Method: POST
+  Endpoint: /auth/login
+  Status Code: 401
+
+✗ FAILED - Get user profile
+  Method: GET
+  Endpoint: /auth/profile
+  Status Code: 401
+  Expected: 200
+  Response: {"success":false,"error":{"message":"No authentication token provided","statusCode":401,"stack":"Error: No authentication token provided\n    at authenticate (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\middleware\\auth.middleware.js:54:19)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at Function.handle (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:175:3)\n    at router (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:47:12)"}}
+  Method: GET
+  Endpoint: /auth/profile
+  Status Code: 401
+
+✗ FAILED - Update user profile
+  Method: PUT
+  Endpoint: /auth/profile
+  Status Code: 401
+  Expected: 200
+  Response: {"success":false,"error":{"message":"No authentication token provided","statusCode":401,"stack":"Error: No authentication token provided\n    at authenticate (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\middleware\\auth.middleware.js:54:19)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at Function.handle (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:175:3)\n    at router (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:47:12)"}}
+  Method: PUT
+  Endpoint: /auth/profile
+  Status Code: 401
+
+✗ FAILED - Refresh access token
+  Method: POST
+  Endpoint: /auth/refresh-token
+  Status Code: 401
+  Expected: 200
+  Response: {"success":false,"error":{"message":"Refresh token not provided","statusCode":401,"stack":"Error: Refresh token not provided\n    at refreshToken (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\controllers\\auth.controller.js:132:23)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at middleware (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express-validator\\lib\\middlewares\\check.js:16:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"}}
+  Method: POST
+  Endpoint: /auth/refresh-token
+  Status Code: 401
+
+✓ PASSED - Verify email
+  Method: GET
+  Endpoint: /auth/verify-email/:token
+  Status Code: 400
+
+✗ FAILED - Resend verification email
+  Method: POST
+  Endpoint: /auth/resend-verification
+  Status Code: 404
+  Expected: 200
+  Response: {"success":false,"error":{"message":"User not found","statusCode":404,"stack":"Error: User not found\n    at AuthService.resendEmailVerification (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\services\\auth.service.js:514:23)\n    at async resendVerificationEmail (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\controllers\\auth.controller.js:434:28)"}}
+  Method: POST
+  Endpoint: /auth/resend-verification
+  Status Code: 404
+
+✓ PASSED - Request password reset
+  Method: POST
+  Endpoint: /auth/password-reset/request
+  Status Code: 200
+
+✓ PASSED - Confirm password reset
+  Method: POST
+  Endpoint: /auth/password-reset/confirm
+  Status Code: 400
+
+✗ FAILED - Get account status
+  Method: GET
+  Endpoint: /auth/account-status/:identifier
+  Status Code: 404
+  Expected: 200
+  Response: {"success":false,"error":"API endpoint not found","message":"Route GET /api/auth/account-status/ does not exist","available_endpoints":["GET /api/","POST /api/auth/login","POST /api/auth/register","GET /api/elections","GET /api/results/:electionId","POST /api/votes/cast","GET /api/admin/dashboard","GET /api/audit/logs","GET /api/reports/election/:electionId","GET /api/reports/system","GET /api/health"]}
+  Method: GET
+  Endpoint: /auth/account-status/:identifier
+  Status Code: 404
+
+✗ FAILED - Change password
+  Method: POST
+  Endpoint: /auth/change-password
+  Status Code: 401
+  Expected: 200
+  Response: {"success":false,"error":{"message":"No authentication token provided","statusCode":401,"stack":"Error: No authentication token provided\n    at authenticate (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\middleware\\auth.middleware.js:54:19)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at Function.handle (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:175:3)\n    at router (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:47:12)"}}
+  Method: POST
+  Endpoint: /auth/change-password
+  Status Code: 401
+
+✗ FAILED - Setup 2FA
+  Method: POST
+  Endpoint: /auth/2fa/setup
+  Status Code: 401
+  Expected: 200
+  Response: {"success":false,"error":{"message":"No authentication token provided","statusCode":401,"stack":"Error: No authentication token provided\n    at authenticate (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\middleware\\auth.middleware.js:54:19)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at Function.handle (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:175:3)\n    at router (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:47:12)"}}
+  Method: POST
+  Endpoint: /auth/2fa/setup
+  Status Code: 401
+
+✓ PASSED - Verify 2FA
+  Method: POST
+  Endpoint: /auth/2fa/verify
+  Status Code: 401
+
+✓ PASSED - Disable 2FA
+  Method: POST
+  Endpoint: /auth/2fa/disable
+  Status Code: 401
+
+✗ FAILED - Get active sessions
+  Method: GET
+  Endpoint: /auth/sessions
+  Status Code: 401
+  Expected: 200
+  Response: {"success":false,"error":{"message":"No authentication token provided","statusCode":401,"stack":"Error: No authentication token provided\n    at authenticate (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\middleware\\auth.middleware.js:54:19)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at Function.handle (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:175:3)\n    at router (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:47:12)"}}
+  Method: GET
+  Endpoint: /auth/sessions
+  Status Code: 401
+
+✗ FAILED - User logout
+  Method: POST
+  Endpoint: /auth/logout
+  Status Code: 401
+  Expected: 200
+  Response: {"success":false,"error":{"message":"No authentication token provided","statusCode":401,"stack":"Error: No authentication token provided\n    at authenticate (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\dist\\middleware\\auth.middleware.js:54:19)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at Function.handle (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:175:3)\n    at router (C:\\Users\\user\\OneDrive\\Desktop\\projects\\voting-system\\backend\\node_modules\\express\\lib\\router\\index.js:47:12)"}}
+  Method: POST
+  Endpoint: /auth/logout
+  Status Code: 401
+
+✓ PASSED - Get system statistics
+  Method: GET
+  Endpoint: /admin/stats
+  Status Code: 200
+
+✓ PASSED - Get all users
+  Method: GET
+  Endpoint: /admin/users
+  Status Code: 200
+
+✓ PASSED - Get specific user
+  Method: GET
+  Endpoint: /admin/users/:userId
+  Status Code: 200
+
+✓ PASSED - Create admin user
+  Method: POST
+  Endpoint: /admin/users
+  Status Code: 403
+
+✓ PASSED - Update user
+  Method: PUT
+  Endpoint: /admin/users/:userId
+  Status Code: 200
+
+✓ PASSED - Update user role
+  Method: PUT
+  Endpoint: /admin/users/:userId/role
+  Status Code: 403
+
+✓ PASSED - Toggle user status
+  Method: PUT
+  Endpoint: /admin/users/:userId/status
+  Status Code: 404
+
+✓ PASSED - Delete user
+  Method: DELETE
+  Endpoint: /admin/users/:userId
+  Status Code: 403
+
+✓ PASSED - Import users from Excel
+  Method: POST
+  Endpoint: /admin/users/import
+  Status Code: 400
+
+✓ PASSED - Get audit logs
+  Method: GET
+  Endpoint: /admin/audit-logs
+  Status Code: 200
+
+✓ PASSED - Generate system report
+  Method: GET
+  Endpoint: /admin/reports
+  Status Code: 200
+
+✓ PASSED - Clear system caches
+  Method: POST
+  Endpoint: /admin/cache/clear
+  Status Code: 200
+
+✓ PASSED - Get dashboard overview
+  Method: GET
+  Endpoint: /admin/dashboard
+  Status Code: 200
+
+✓ PASSED - Initiate database backup
+  Method: POST
+  Endpoint: /admin/backup
+  Status Code: 403
+
+✓ PASSED - Send system notification
+  Method: POST
+  Endpoint: /admin/notifications/system
+  Status Code: 200
+
+✓ PASSED - Get system health
+  Method: GET
+  Endpoint: /admin/health
+  Status Code: 200
+
+✓ PASSED - Emergency shutdown
+  Method: POST
+  Endpoint: /admin/emergency/shutdown
+  Status Code: 403
+
+✓ PASSED - Get admin analytics
+  Method: GET
+  Endpoint: /admin/analytics
+  Status Code: 200
+
+✓ PASSED - Get audit logs
+  Method: GET
+  Endpoint: /audit/logs
+  Status Code: 200
+
+✓ PASSED - Get specific audit log
+  Method: GET
+  Endpoint: /audit/logs/:logId
+  Status Code: 200
+
+✓ PASSED - Get security events
+  Method: GET
+  Endpoint: /audit/security-events
+  Status Code: 200
+
+✓ PASSED - Generate compliance report
+  Method: GET
+  Endpoint: /audit/compliance-report
+  Status Code: 200
+
+✓ PASSED - Get audit analytics
+  Method: GET
+  Endpoint: /audit/analytics
+  Status Code: 200
+
+✓ PASSED - Export audit logs
+  Method: GET
+  Endpoint: /audit/export
+  Status Code: 200
+
+✓ PASSED - Cleanup old logs
+  Method: POST
+  Endpoint: /audit/cleanup
+  Status Code: 403
+
+✓ PASSED - Verify audit integrity
+  Method: GET
+  Endpoint: /audit/integrity
+  Status Code: 200
+
+✗ FAILED - Create manual audit entry
+  Method: POST
+  Endpoint: /audit/manual-entry
+  Status Code: 201
+  Expected: 200/403
+  Response: {"success":true,"message":"Manual audit entry created successfully","data":{"id":"7745d27a0319f9af7d85afab12bd3595","action":"Manual test entry","category":"SYSTEM","severity":"LOW","timestamp":"2025-10-22T16:54:36.381Z"}}
+  Method: POST
+  Endpoint: /audit/manual-entry
+  Status Code: 201
+
+✓ PASSED - Get audit statistics
+  Method: GET
+  Endpoint: /audit/statistics
+  Status Code: 200
+
+✓ PASSED - Resolve security event
+  Method: POST
+  Endpoint: /audit/security-events/:eventId/resolve
+  Status Code: 200
+
+
+==============================================================================
+TEST SUMMARY
+==============================================================================
+Total Tests: 45
+Passed: 33
+Failed: 12
+Success Rate: 73.33%
+==============================================================================

@@ -1,0 +1,9 @@
+{
+  "test_run": "2025-10-22T19:54:43+03:00",
+  "modules_tested": ["auth", "admin", "audit"],
+  "total_tests": 45,
+  "passed": 33,
+  "failed": 12,
+  "success_rate": "73.33%",
+  "results_file": "test-results-1-auth-admin-audit.txt"
+}

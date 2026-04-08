@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Maintenance Notification</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f3f4f6; padding: 40px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <tr>
+            <td style="background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); padding: 40px; text-align: center; border-radius: 8px 8px 0 0;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">🔧 System Maintenance</h1>
+              <p style="color: #e5e7eb; margin: 10px 0 0 0; font-size: 14px;">Scheduled maintenance notification</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 40px;">
+              <h2 style="color: #4b5563; margin: 0 0 20px 0; font-size: 24px;">Dear {{firstName}},</h2>
+              <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                We are scheduling system maintenance for the UniElect platform to improve performance and security.
+              </p>
+              <div style="background-color: #f9fafb; border-left: 4px solid #6b7280; padding: 20px; margin: 30px 0; border-radius: 4px;">
+                <p style="color: #374151; font-size: 14px; margin: 0 0 10px 0; font-weight: 600;">📋 Maintenance Details:</p>
+                <p style="color: #374151; font-size: 14px; margin: 5px 0;"><strong>Title:</strong> {{title}}</p>
+                <p style="color: #374151; font-size: 14px; margin: 5px 0;"><strong>Description:</strong> {{message}}</p>
+                {{#if scheduledTime}}
+                <p style="color: #374151; font-size: 14px; margin: 5px 0;"><strong>Scheduled Time:</strong> {{scheduledTime}}</p>
+                {{/if}}
+              </div>
+              <div style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 30px 0; border-radius: 4px;">
+                <p style="color: #92400e; font-size: 14px; margin: 0;">
+                  ⚠️ During this maintenance window, the system may be temporarily unavailable. We apologize for any inconvenience and appreciate your patience.
+                </p>
+              </div>
+              <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 20px 0 0 0;">
+                Thank you for your understanding. We're committed to providing you with the best possible experience.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; border-top: 1px solid #e5e7eb;">
+              <p style="color: #6b7280; font-size: 14px; text-align: center; margin: 0;">Best regards,<br><strong>UniElect Technical Team</strong></p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

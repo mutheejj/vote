@@ -1,0 +1,1309 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["metrics", "tracing"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Position {
+  id                        String                        @id @default(cuid())
+  electionId                String
+  name                      String
+  description               String?
+  order                     Int                           @default(0)
+  maxSelections             Int                           @default(1)
+  minSelections             Int                           @default(0)
+  candidates                Candidate[]
+  election                  Election                      @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  results                   Result[]
+  votes                     Vote[]
+  candidatePreRegistrations CandidatePreRegistration[]    @relation("PreRegPosition")
+
+  @@unique([electionId, name])
+  @@index([electionId])
+}
+
+model Vote {
+  id               String        @id @default(cuid())
+  electionId       String
+  positionId       String
+  candidateId      String?
+  voterId          String
+  sessionId        String
+  voteHash         String        @unique
+  encryptedVote    String?
+  isAbstain        Boolean       @default(false)
+  verificationCode String        @unique
+  verified         Boolean       @default(false)
+  verifiedAt       DateTime?
+  castAt           DateTime      @default(now())
+  metadata         Json?
+  candidate        Candidate?    @relation(fields: [candidateId], references: [id])
+  election         Election      @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  position         Position      @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  votingSession    VotingSession @relation(fields: [sessionId], references: [id])
+  voter            User          @relation(fields: [voterId], references: [id])
+
+  @@unique([electionId, positionId, voterId])
+  @@index([electionId, positionId])
+  @@index([voterId])
+  @@index([voteHash])
+  @@index([castAt])
+  @@index([verified])
+  @@index([electionId, castAt])
+  @@index([voterId, castAt])
+}
+
+model VotingSession {
+  id                String        @id @default(cuid())
+  voterId           String
+  electionId        String
+  ipAddress         String
+  userAgent         String
+  deviceFingerprint String?
+  status            SessionStatus @default(ACTIVE)
+  completedAt       DateTime?
+  sessionToken      String        @unique
+  expiresAt         DateTime
+  startedAt         DateTime      @default(now())
+  lastActivityAt    DateTime      @default(now())
+  votes             Vote[]
+  election          Election      @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  voter             User          @relation(fields: [voterId], references: [id])
+
+  @@index([voterId, electionId])
+  @@index([sessionToken])
+}
+
+model Result {
+  id           String    @id @default(cuid())
+  electionId   String
+  positionId   String
+  candidateId  String
+  totalVotes   Int       @default(0)
+  percentage   Float     @default(0)
+  rank         Int       @default(0)
+  isWinner     Boolean   @default(false)
+  isTie        Boolean   @default(false)
+  calculatedAt DateTime  @default(now())
+  publishedAt  DateTime?
+  candidate    Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  election     Election  @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  position     Position  @relation(fields: [positionId], references: [id], onDelete: Cascade)
+
+  @@unique([electionId, positionId, candidateId])
+  @@index([electionId, positionId])
+}
+
+model AuditLog {
+  id         String        @id @default(cuid())
+  userId     String?
+  electionId String?
+  action     String
+  category   AuditCategory
+  severity   AuditSeverity
+  entityType String?
+  entityId   String?
+  oldData    Json?
+  newData    Json?
+  metadata   Json?
+  ipAddress  String?
+  userAgent  String?
+  requestId  String?
+  createdAt  DateTime      @default(now())
+  election   Election?     @relation(fields: [electionId], references: [id])
+  user       User?         @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([electionId])
+  @@index([category])
+  @@index([createdAt])
+  @@index([userId, category, createdAt])
+  @@index([category, severity])
+  @@index([severity, createdAt])
+}
+
+model Notification {
+  id        String               @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      NotificationType
+  priority  NotificationPriority
+  data      Json?
+  actionUrl String?
+  read      Boolean              @default(false)
+  readAt    DateTime?
+  channels  String[]
+  emailSent Boolean              @default(false)
+  smsSent   Boolean              @default(false)
+  pushSent  Boolean              @default(false)
+  createdAt DateTime             @default(now())
+  expiresAt DateTime?
+  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([createdAt])
+}
+
+model ElectionNotification {
+  id           String    @id @default(cuid())
+  electionId   String
+  type         String
+  scheduledFor DateTime
+  sent         Boolean   @default(false)
+  sentAt       DateTime?
+  subject      String
+  template     String
+  data         Json?
+  election     Election  @relation(fields: [electionId], references: [id], onDelete: Cascade)
+
+  @@index([electionId])
+  @@index([scheduledFor])
+  @@index([sent])
+  @@index([sent, scheduledFor])
+  @@index([type])
+  @@index([sent, scheduledFor, type])
+  @@index([scheduledFor, sent])
+}
+
+model SystemConfig {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       Json
+  description String?
+  category    String
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+}
+
+model RefreshToken {
+  id              String    @id @default(cuid())
+  token           String    @unique
+  userId          String
+  expiresAt       DateTime
+  createdAt       DateTime  @default(now())
+  revokedAt       DateTime?
+  replacedByToken String?
+  ipAddress       String?
+  userAgent       String?
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@index([userId, revokedAt, expiresAt])
+  @@index([expiresAt, revokedAt])
+  @@index([userId, expiresAt])
+}
+
+model VerificationToken {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  userId    String
+  type      TokenType
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+}
+
+model VoterEligibility {
+  id         String   @id @default(cuid())
+  electionId String
+  userId     String
+  addedBy    String
+  addedAt    DateTime @default(now())
+  reason     String?
+  election   Election @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([electionId, userId])
+  @@index([electionId])
+  @@index([userId])
+}
+
+model File {
+  id                  String        @id @default(cuid())
+  originalName        String
+  filename            String        @unique
+  path                String
+  url                 String
+  size                Int
+  mimeType            String
+  category            FileCategory
+  subCategory         String?
+  tags                String[]      @default([])
+  metadata            Json?
+  checksum            String?
+  thumbnailUrl        String?
+  isPublic            Boolean       @default(false)
+  downloadCount       Int           @default(0)
+  isEncrypted         Boolean       @default(false)
+  accessLevel         AccessLevel   @default(PUBLIC)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  lastAccessed        DateTime      @default(now())
+  expiresAt           DateTime?
+  uploadedById        String?
+  uploadedBy          User?         @relation(fields: [uploadedById], references: [id])
+  fileMetadata        FileMetadata?
+  candidateBanners    Candidate[]   @relation("CandidateBanner")
+  candidateManifestos Candidate[]   @relation("CandidateManifesto")
+  candidatePhotos     Candidate[]   @relation("CandidatePhoto")
+  electionCovers      Election[]    @relation("ElectionCover")
+  userProfiles        User[]        @relation("ProfileImage")
+
+  @@index([category])
+  @@index([uploadedById])
+  @@index([createdAt])
+  @@index([mimeType])
+  @@index([filename])
+}
+
+model Analytics {
+  id         String             @id @default(cuid())
+  eventType  AnalyticsEventType
+  entityType String
+  entityId   String?
+  userId     String?
+  sessionId  String?
+  ipAddress  String?
+  userAgent  String?
+  deviceType String?
+  browser    String?
+  os         String?
+  country    String?
+  region     String?
+  city       String?
+  eventData  Json?
+  duration   Int?
+  timestamp  DateTime           @default(now())
+  date       DateTime           @default(now()) @db.Date
+  user       User?              @relation(fields: [userId], references: [id])
+
+  @@index([eventType])
+  @@index([entityType, entityId])
+  @@index([userId])
+  @@index([timestamp])
+  @@index([date])
+}
+
+model Backup {
+  id               String       @id @default(cuid())
+  name             String
+  description      String?
+  type             BackupType
+  status           BackupStatus @default(PENDING)
+  filePath         String?
+  fileSize         Int?
+  checksum         String?
+  tables           String[]     @default([])
+  recordCount      Int?
+  compressionRatio Float?
+  startedAt        DateTime?
+  completedAt      DateTime?
+  duration         Int?
+  createdById      String?
+  createdAt        DateTime     @default(now())
+  expiresAt        DateTime?
+  createdBy        User?        @relation(fields: [createdById], references: [id])
+
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Achievement {
+  id               String            @id @default(cuid())
+  name             String
+  description      String
+  type             AchievementType
+  icon             String?
+  badgeColor       String?
+  criteria         Json
+  points           Int               @default(0)
+  isActive         Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  userAchievements UserAchievement[]
+
+  @@index([type])
+  @@index([isActive])
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  achievementId String
+  progress      Float       @default(0)
+  completed     Boolean     @default(false)
+  completedAt   DateTime?
+  metadata      Json?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@index([achievementId])
+  @@index([completed])
+}
+
+model SocialMedia {
+  id        String         @id @default(cuid())
+  userId    String
+  platform  SocialPlatform
+  username  String
+  url       String
+  verified  Boolean        @default(false)
+  isPublic  Boolean        @default(true)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, platform])
+  @@index([userId])
+  @@index([platform])
+}
+
+model UserPreferences {
+  id                  String            @id @default(cuid())
+  userId              String            @unique
+  emailNotifications  Boolean           @default(true)
+  smsNotifications    Boolean           @default(false)
+  pushNotifications   Boolean           @default(true)
+  electionReminders   Boolean           @default(true)
+  resultNotifications Boolean           @default(true)
+  campaignUpdates     Boolean           @default(false)
+  profileVisibility   ProfileVisibility @default(PUBLIC)
+  showVotingHistory   Boolean           @default(false)
+  showAchievements    Boolean           @default(true)
+  theme               Theme             @default(LIGHT)
+  language            String            @default("en")
+  timezone            String            @default("UTC")
+  highContrast        Boolean           @default(false)
+  largeFonts          Boolean           @default(false)
+  screenReader        Boolean           @default(false)
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  user                User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model IssueReport {
+  id           String        @id @default(cuid())
+  reportedBy   String
+  title        String
+  description  String
+  category     IssueCategory
+  priority     IssuePriority @default(MEDIUM)
+  status       IssueStatus   @default(OPEN)
+  page         String?
+  userAgent    String?
+  errorDetails Json?
+  screenshots  String[]      @default([])
+  assignedTo   String?
+  resolvedBy   String?
+  resolution   String?
+  resolvedAt   DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  assignee     User?         @relation("AssignedIssues", fields: [assignedTo], references: [id])
+  reporter     User          @relation("ReportedIssues", fields: [reportedBy], references: [id])
+  resolver     User?         @relation("ResolvedIssues", fields: [resolvedBy], references: [id])
+
+  @@index([reportedBy])
+  @@index([status])
+  @@index([category])
+  @@index([priority])
+  @@index([createdAt])
+}
+
+model Campaign {
+  id             String         @id @default(cuid())
+  candidateId    String         @unique
+  electionId     String
+  name           String
+  slogan         String?
+  description    String
+  manifesto      String
+  logo           String?
+  bannerImage    String?
+  colors         Json?
+  email          String?
+  phone          String?
+  website        String?
+  socialMedia    Json?
+  status         CampaignStatus @default(DRAFT)
+  isApproved     Boolean        @default(false)
+  approvedBy     String?
+  approvedAt     DateTime?
+  viewCount      Int            @default(0)
+  shareCount     Int            @default(0)
+  engagementRate Float          @default(0)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  publishedAt    DateTime?
+  approver       User?          @relation(fields: [approvedBy], references: [id])
+  candidate      Candidate      @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  election       Election       @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  tasks          Task[]
+
+  @@index([electionId])
+  @@index([status])
+  @@index([isApproved])
+}
+
+model Task {
+  id             String       @id @default(cuid())
+  title          String
+  description    String?
+  type           TaskType
+  priority       TaskPriority @default(MEDIUM)
+  status         TaskStatus   @default(PENDING)
+  assignedTo     String?
+  assignedBy     String
+  entityType     String?
+  entityId       String?
+  dueDate        DateTime?
+  estimatedHours Float?
+  actualHours    Float?
+  completedAt    DateTime?
+  completedBy    String?
+  notes          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  creator        User         @relation("CreatedTasks", fields: [assignedBy], references: [id])
+  assignee       User?        @relation("AssignedTasks", fields: [assignedTo], references: [id])
+  completer      User?        @relation("CompletedTasks", fields: [completedBy], references: [id])
+  campaign       Campaign?    @relation(fields: [entityId], references: [id], onDelete: Cascade)
+
+  @@index([assignedTo])
+  @@index([assignedBy])
+  @@index([status])
+  @@index([type])
+  @@index([dueDate])
+  @@index([entityType, entityId])
+}
+
+model User {
+  id                     String                @id @default(cuid())
+  studentId              String                @unique
+  email                  String                @unique
+  firstName              String
+  lastName               String
+  middleName             String?
+  password               String
+  phone                  String?
+  profileImage           String?
+  bio                    String?
+  faculty                String
+  department             String
+  course                 String
+  yearOfStudy            Int
+  admissionYear          Int
+  gender                 String?
+  isActive               Boolean               @default(true)
+  isVerified             Boolean               @default(false)
+  emailVerified          DateTime?
+  phoneVerified          DateTime?
+  role                   UserRole              @default(VOTER)
+  permissions            String[]              @default([])
+  passwordResetToken     String?
+  passwordResetExpires   DateTime?
+  twoFactorEnabled       Boolean               @default(false)
+  twoFactorSecret        String?
+  lastLogin              DateTime?
+  loginAttempts          Int                   @default(0)
+  lockedUntil            DateTime?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+  analytics              Analytics[]
+  auditLogs              AuditLog[]
+  createdBackups         Backup[]
+  approvedCampaigns      Campaign[]
+  createdCryptoKeys      CryptoKey[]
+  dashboardWidgets       DashboardWidget[]
+  createdElections       Election[]            @relation("ElectionCreator")
+  uploadedFiles          File[]
+  requestedReports       GeneratedReport[]
+  assignedIssues         IssueReport[]         @relation("AssignedIssues")
+  reportedIssues         IssueReport[]         @relation("ReportedIssues")
+  resolvedIssues         IssueReport[]         @relation("ResolvedIssues")
+  notifications          Notification[]
+  refreshTokens          RefreshToken[]
+  createdReportTemplates ReportTemplate[]
+  resolvedSecurityEvents SecurityEvent[]       @relation("SecurityEventResolver")
+  securityEvents         SecurityEvent[]
+  verifiedHashes         SecurityHash[]
+  socialMedia            SocialMedia[]
+  createdTasks           Task[]                @relation("CreatedTasks")
+  assignedTasks          Task[]                @relation("AssignedTasks")
+  completedTasks         Task[]                @relation("CompletedTasks")
+  achievements           UserAchievement[]
+  preferences            UserPreferences?
+  verificationTokens     VerificationToken[]
+  votes                  Vote[]
+  voterEligibility       VoterEligibility[]
+  votingSessions         VotingSession[]
+  webSocketConnections   WebSocketConnection[]
+  adminElections         Election[]            @relation("ElectionAdmin")
+  profileImages          File[]                @relation("ProfileImage")
+  sentAdminInvitations   AdminInvitation[]     @relation("InvitationSender")
+  candidateApplication   CandidatePreRegistration? @relation("ApplicationUser")
+  reviewedApplications   CandidatePreRegistration[] @relation("ApplicationReviewer")
+
+  @@index([studentId])
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+  @@index([isVerified])
+  @@index([lastLogin])
+  @@index([createdAt])
+  @@index([role, isActive])
+  @@index([role, isVerified])
+  @@index([role, createdAt])
+  @@index([lastLogin, role])
+  @@index([email, isActive])
+  @@index([studentId, isActive])
+  @@index([lockedUntil, isActive])
+  @@index([isActive, isVerified])
+  @@index([isActive, isVerified, faculty])
+  @@index([isActive, isVerified, department])
+}
+
+model Election {
+  id                      String                        @id @default(cuid())
+  title                   String
+  description             String
+  type                    ElectionType
+  status                  ElectionStatus                @default(DRAFT)
+  startDate               DateTime
+  endDate                 DateTime
+  registrationStart       DateTime?
+  registrationEnd         DateTime?
+  eligibleFaculties       String[]
+  eligibleDepartments     String[]
+  eligibleCourses         String[]
+  eligibleYears           Int[]
+  minVoterAge             Int?
+  maxVoterAge             Int?
+  maxVotesPerPosition     Int                           @default(1)
+  allowAbstain            Boolean                       @default(true)
+  requireAllPositions     Boolean                       @default(false)
+  showLiveResults         Boolean                       @default(false)
+  requireTwoFactor        Boolean                       @default(false)
+  encryptVotes            Boolean                       @default(true)
+  anonymousVoting         Boolean                       @default(true)
+  coverImage              String?
+  rules                   Json?
+  totalEligibleVoters     Int                           @default(0)
+  totalVotesCast          Int                           @default(0)
+  turnoutPercentage       Float                         @default(0)
+  createdAt               DateTime                      @default(now())
+  updatedAt               DateTime                      @updatedAt
+  publishedAt             DateTime?
+  archivedAt              DateTime?
+  createdById             String
+  auditLogs               AuditLog[]
+  campaigns               Campaign[]
+  candidates              Candidate[]
+  createdBy               User                          @relation("ElectionCreator", fields: [createdById], references: [id])
+  notifications           ElectionNotification[]
+  positions               Position[]
+  results                 Result[]
+  votes                   Vote[]
+  voterEligibility        VoterEligibility[]
+  votingSessions          VotingSession[]
+  admins                  User[]                        @relation("ElectionAdmin")
+  coverFiles              File[]                        @relation("ElectionCover")
+  candidatePreRegistrations CandidatePreRegistration[] @relation("PreRegElection")
+
+  @@index([status])
+  @@index([type])
+  @@index([startDate, endDate])
+  @@index([status, endDate])
+  @@index([createdById])
+  @@index([createdAt])
+  @@index([updatedAt])
+  @@index([publishedAt])
+  @@index([status, startDate])
+  @@index([type, status])
+  @@index([status, type, startDate])
+  @@index([status, startDate, endDate])
+  @@index([status, endDate, startDate])
+  // Optimized indexes for frequent scheduler queries
+  @@index([status, startDate, id])
+  @@index([status, endDate, id])
+}
+
+model Candidate {
+  id                     String          @id @default(cuid())
+  electionId             String
+  positionId             String
+  studentId              String
+  firstName              String
+  lastName               String
+  middleName             String?
+  email                  String
+  phone                  String
+  faculty                String
+  department             String
+  course                 String
+  yearOfStudy            Int
+  manifesto              String
+  slogan                 String?
+  photo                  String
+  bannerImage            String?
+  socialMedia            Json?
+  runningMateId          String?         @unique
+  status                 CandidateStatus @default(PENDING)
+  verifiedAt             DateTime?
+  disqualifiedAt         DateTime?
+  disqualificationReason String?
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
+  campaign               Campaign?
+  election               Election        @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  position               Position        @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  runningMate            Candidate?      @relation("RunningMate", fields: [runningMateId], references: [id])
+  runningMateFor         Candidate?      @relation("RunningMate")
+  results                Result[]
+  votes                  Vote[]
+  bannerFiles            File[]          @relation("CandidateBanner")
+  manifestoFiles         File[]          @relation("CandidateManifesto")
+  photoFiles             File[]          @relation("CandidatePhoto")
+
+  @@unique([electionId, positionId, studentId])
+  @@index([electionId, positionId])
+  @@index([status])
+  @@index([electionId])
+  @@index([positionId])
+  @@index([createdAt])
+  @@index([status, electionId])
+  @@index([status, createdAt])
+  @@index([electionId, status])
+  @@index([electionId, createdAt])
+}
+
+model SecurityEvent {
+  id          String            @id @default(cuid())
+  type        SecurityEventType
+  severity    AuditSeverity
+  description String
+  ipAddress   String?
+  userAgent   String?
+  userId      String?
+  riskScore   Float?
+  blocked     Boolean           @default(false)
+  resolved    Boolean           @default(false)
+  resolvedBy  String?
+  resolvedAt  DateTime?
+  metadata    Json?
+  createdAt   DateTime          @default(now())
+  resolver    User?             @relation("SecurityEventResolver", fields: [resolvedBy], references: [id])
+  user        User?             @relation(fields: [userId], references: [id])
+
+  @@index([type])
+  @@index([severity])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([resolved])
+}
+
+model CryptoKey {
+  id               String        @id @default(cuid())
+  keyId            String        @unique
+  keyType          CryptoKeyType
+  algorithm        String
+  encryptedKey     String
+  publicKey        String?
+  keySize          Int
+  purpose          String[]      @default([])
+  isActive         Boolean       @default(true)
+  createdBy        String?
+  rotationSchedule String?
+  lastRotated      DateTime?
+  expiresAt        DateTime?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  creator          User?         @relation(fields: [createdBy], references: [id])
+
+  @@index([keyType])
+  @@index([purpose])
+  @@index([isActive])
+  @@index([expiresAt])
+}
+
+model SecurityHash {
+  id           String    @id @default(cuid())
+  entityType   String
+  entityId     String
+  hashValue    String    @unique
+  algorithm    String    @default("SHA-256")
+  salt         String?
+  verified     Boolean   @default(false)
+  verifiedAt   DateTime?
+  verifiedBy   String?
+  previousHash String?
+  blockNumber  Int?
+  createdAt    DateTime  @default(now())
+  verifier     User?     @relation(fields: [verifiedBy], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([hashValue])
+  @@index([verified])
+  @@index([blockNumber])
+}
+
+model WebSocketConnection {
+  id             String           @id @default(cuid())
+  connectionId   String           @unique
+  userId         String?
+  ipAddress      String
+  userAgent      String?
+  sessionId      String?
+  roomId         String?
+  status         ConnectionStatus @default(CONNECTED)
+  lastPing       DateTime         @default(now())
+  connectedAt    DateTime         @default(now())
+  disconnectedAt DateTime?
+  user           User?            @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@index([roomId])
+  @@index([connectedAt])
+}
+
+model DashboardWidget {
+  id            String      @id @default(cuid())
+  userId        String
+  widgetType    WidgetType
+  position      Json
+  configuration Json?
+  isVisible     Boolean     @default(true)
+  order         Int         @default(0)
+  accessLevel   AccessLevel @default(AUTHENTICATED)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([widgetType])
+  @@index([isVisible])
+}
+
+model ReportTemplate {
+  id                 String            @id @default(cuid())
+  name               String
+  description        String?
+  type               ReportType
+  format             ReportFormat[]    @default([PDF])
+  parameters         Json
+  isScheduled        Boolean           @default(false)
+  scheduleExpression String?
+  isPublic           Boolean           @default(false)
+  accessRoles        UserRole[]        @default([])
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  createdById        String
+  generatedReports   GeneratedReport[]
+  createdBy          User              @relation(fields: [createdById], references: [id])
+
+  @@index([type])
+  @@index([isScheduled])
+  @@index([createdById])
+}
+
+model GeneratedReport {
+  id             String          @id @default(cuid())
+  templateId     String?
+  name           String
+  type           ReportType
+  format         ReportFormat
+  filePath       String?
+  fileSize       Int?
+  downloadCount  Int             @default(0)
+  status         ReportStatus    @default(GENERATING)
+  parameters     Json?
+  generationTime Int?
+  errorMessage   String?
+  isPublic       Boolean         @default(false)
+  accessUsers    String[]        @default([])
+  generatedAt    DateTime        @default(now())
+  expiresAt      DateTime?
+  requestedById  String
+  requestedBy    User            @relation(fields: [requestedById], references: [id])
+  template       ReportTemplate? @relation(fields: [templateId], references: [id])
+
+  @@index([type])
+  @@index([status])
+  @@index([requestedById])
+  @@index([generatedAt])
+}
+
+model FileMetadata {
+  id               String               @id @default(cuid())
+  fileId           String               @unique
+  processingStatus FileProcessingStatus @default(PENDING)
+  processedAt      DateTime?
+  width            Int?
+  height           Int?
+  pages            Int?
+  duration         Int?
+  quality          String?
+  compressionRatio Float?
+  originalSize     Int?
+  virusScanStatus  VirusScanStatus      @default(PENDING)
+  virusScanResult  String?
+  scannedAt        DateTime?
+  contentType      String?
+  extractedText    String?
+  keywords         String[]             @default([])
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  file             File                 @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([processingStatus])
+  @@index([virusScanStatus])
+  @@index([contentType])
+}
+
+// Candidate Pre-Registration Model
+// Students must apply here first before becoming candidates
+model CandidatePreRegistration {
+  id                String              @id @default(cuid())
+  studentId         String
+  email             String
+  firstName         String
+  lastName          String
+  middleName        String?
+  phone             String?
+  faculty           String
+  department        String
+  course            String
+  yearOfStudy       Int
+  intendedPosition  String              // What position they want to run for (text)
+  electionId        String?             // Reference to actual election
+  positionId        String?             // Reference to actual position
+  reason            String              @db.Text // Why they want to run (statement of intent)
+  status            PreRegStatus        @default(PENDING)
+  userId            String?             @unique // Link to created user account (one application per user)
+  approvalToken     String?             @unique
+  tokenExpiry       DateTime?
+  reviewedBy        String?             // Admin user ID who reviewed
+  reviewedAt        DateTime?
+  reviewNotes       String?             @db.Text // Admin's notes during review
+  rejectionReason   String?             @db.Text
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  user              User?               @relation("ApplicationUser", fields: [userId], references: [id])
+  reviewer          User?               @relation("ApplicationReviewer", fields: [reviewedBy], references: [id])
+  election          Election?           @relation("PreRegElection", fields: [electionId], references: [id])
+  position          Position?           @relation("PreRegPosition", fields: [positionId], references: [id])
+
+  @@index([email])
+  @@index([studentId])
+  @@index([status])
+  @@index([approvalToken])
+  @@index([createdAt])
+  @@index([electionId])
+  @@index([positionId])
+}
+
+// Admin Invitation Model
+// Only Super Admins can create admin accounts via invitation
+model AdminInvitation {
+  id              String    @id @default(cuid())
+  email           String
+  invitationToken String    @unique
+  role            UserRole  // ADMIN, MODERATOR, etc. (not SUPER_ADMIN or VOTER)
+  invitedBy       String    // Super Admin user ID
+  expiresAt       DateTime
+  used            Boolean   @default(false)
+  usedAt          DateTime?
+  usedByName      String?   // Name of person who used the invitation
+  usedByStudentId String?   // Student ID of person who registered
+  revokedAt       DateTime?
+  revokedBy       String?   // Admin who revoked the invitation
+  createdAt       DateTime  @default(now())
+
+  inviter         User      @relation("InvitationSender", fields: [invitedBy], references: [id])
+
+  @@index([invitationToken])
+  @@index([email])
+  @@index([used])
+  @@index([expiresAt])
+}
+
+// System Statistics Cache
+// Real-time statistics updated via database triggers for sub-10ms performance
+// Replaces slow COUNT(*) queries that take 2000ms+ on large datasets
+model SystemStats {
+  id        String    @id @default(cuid())
+  key       String    @unique
+  value     Json
+  updatedAt DateTime  @default(now()) @updatedAt
+  expiresAt DateTime?
+
+  @@index([key])
+  @@index([expiresAt])
+}
+
+enum PreRegStatus {
+  PENDING        // Waiting for admin review
+  APPROVED       // Approved, token sent to email
+  REJECTED       // Rejected by admin
+  REGISTERED     // Student completed full registration
+  EXPIRED        // Token expired, need to reapply
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  MODERATOR
+  VOTER
+}
+
+enum ElectionType {
+  PRESIDENTIAL
+  STUDENT_UNION
+  DEPARTMENTAL
+  FACULTY
+  CLUB
+  SOCIETY
+  REFERENDUM
+  POLL
+}
+
+enum ElectionStatus {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+  ARCHIVED
+}
+
+enum CandidateStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  DISQUALIFIED
+  WITHDRAWN
+}
+
+enum SessionStatus {
+  ACTIVE
+  COMPLETED
+  EXPIRED
+  TERMINATED
+}
+
+enum AuditCategory {
+  AUTH
+  ELECTION
+  VOTING
+  CANDIDATE
+  USER
+  SYSTEM
+  SECURITY
+}
+
+enum AuditSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum NotificationType {
+  ELECTION_STARTED
+  ELECTION_ENDING
+  ELECTION_ENDED
+  VOTE_CONFIRMED
+  RESULT_PUBLISHED
+  ACCOUNT_ACTIVITY
+  SECURITY_ALERT
+  SYSTEM_UPDATE
+}
+
+enum NotificationPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TokenType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  TWO_FACTOR
+}
+
+enum FileCategory {
+  PROFILE_IMAGE
+  CANDIDATE_PHOTO
+  CANDIDATE_BANNER
+  MANIFESTO
+  ELECTION_COVER
+  DOCUMENT
+  SYSTEM
+  TEMP
+}
+
+enum AccessLevel {
+  PUBLIC
+  AUTHENTICATED
+  ADMIN_ONLY
+  PRIVATE
+}
+
+enum AnalyticsEventType {
+  PAGE_VIEW
+  LOGIN
+  LOGOUT
+  VOTE_CAST
+  ELECTION_VIEW
+  CANDIDATE_VIEW
+  RESULT_VIEW
+  DOWNLOAD
+  ERROR
+  SEARCH
+  FILTER
+  SORT
+}
+
+enum BackupType {
+  FULL
+  INCREMENTAL
+  DIFFERENTIAL
+  MANUAL
+  SCHEDULED
+}
+
+enum BackupStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  CANCELLED
+  RESTORED
+}
+
+enum AchievementType {
+  VOTING_PARTICIPATION
+  ELECTION_CREATOR
+  CANDIDATE_REGISTRATION
+  EARLY_VOTER
+  CONSISTENT_VOTER
+  ELECTION_MODERATOR
+  COMMUNITY_ENGAGEMENT
+  SYSTEM_CONTRIBUTION
+}
+
+enum SocialPlatform {
+  TWITTER
+  FACEBOOK
+  INSTAGRAM
+  LINKEDIN
+  GITHUB
+  WEBSITE
+  YOUTUBE
+  TIKTOK
+}
+
+enum ProfileVisibility {
+  PUBLIC
+  AUTHENTICATED_ONLY
+  PRIVATE
+}
+
+enum Theme {
+  LIGHT
+  DARK
+  AUTO
+}
+
+enum IssueCategory {
+  BUG
+  FEATURE_REQUEST
+  UI_UX
+  PERFORMANCE
+  SECURITY
+  AUTHENTICATION
+  VOTING_ISSUE
+  ELECTION_SETUP
+  CANDIDATE_REGISTRATION
+  RESULTS_DISPLAY
+  NOTIFICATION
+  FILE_UPLOAD
+  OTHER
+}
+
+enum IssuePriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+  URGENT
+}
+
+enum IssueStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+  DUPLICATE
+  WONT_FIX
+}
+
+enum CampaignStatus {
+  DRAFT
+  SUBMITTED
+  PUBLISHED
+  PAUSED
+  ENDED
+  ARCHIVED
+}
+
+enum TaskType {
+  ELECTION_SETUP
+  CANDIDATE_REVIEW
+  CAMPAIGN_APPROVAL
+  RESULT_VERIFICATION
+  SYSTEM_MAINTENANCE
+  CONTENT_MODERATION
+  USER_SUPPORT
+  DOCUMENTATION
+  TESTING
+  DEPLOYMENT
+  OTHER
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+  CRITICAL
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+  OVERDUE
+}
+
+enum SecurityEventType {
+  LOGIN_ATTEMPT
+  FAILED_LOGIN
+  BRUTE_FORCE
+  SUSPICIOUS_ACTIVITY
+  UNAUTHORIZED_ACCESS
+  DATA_BREACH_ATTEMPT
+  SQL_INJECTION
+  XSS_ATTEMPT
+  CSRF_ATTEMPT
+  RATE_LIMIT_EXCEEDED
+  INVALID_TOKEN
+  SESSION_HIJACKING
+  DEVICE_FINGERPRINT_MISMATCH
+  GEOLOCATION_ANOMALY
+  TIME_BASED_ANOMALY
+  VOTING_FRAUD_ATTEMPT
+  SYSTEM_INTRUSION
+}
+
+enum CryptoKeyType {
+  VOTE_ENCRYPTION
+  SESSION_SIGNING
+  JWT_SIGNING
+  FILE_ENCRYPTION
+  DATABASE_ENCRYPTION
+  BACKUP_ENCRYPTION
+  COMMUNICATION_ENCRYPTION
+}
+
+enum ConnectionStatus {
+  CONNECTED
+  DISCONNECTED
+  RECONNECTING
+  TIMEOUT
+}
+
+enum WidgetType {
+  STATS_OVERVIEW
+  RECENT_ELECTIONS
+  VOTING_PROGRESS
+  NOTIFICATIONS
+  QUICK_ACTIONS
+  ANALYTICS_CHART
+  ACTIVITY_FEED
+  SYSTEM_HEALTH
+  USER_ACTIVITY
+  ELECTION_COUNTDOWN
+}
+
+enum ReportType {
+  ELECTION_SUMMARY
+  VOTING_ANALYTICS
+  USER_ACTIVITY
+  SYSTEM_PERFORMANCE
+  AUDIT_TRAIL
+  CANDIDATE_PERFORMANCE
+  TURNOUT_ANALYSIS
+  COMPARATIVE_ANALYSIS
+  SECURITY_REPORT
+  COMPLIANCE_REPORT
+}
+
+enum ReportFormat {
+  PDF
+  EXCEL
+  CSV
+  JSON
+  HTML
+}
+
+enum ReportStatus {
+  GENERATING
+  COMPLETED
+  FAILED
+  CANCELLED
+  EXPIRED
+}
+
+enum FileProcessingStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum VirusScanStatus {
+  PENDING
+  SCANNING
+  CLEAN
+  INFECTED
+  QUARANTINED
+  SCAN_FAILED
+}

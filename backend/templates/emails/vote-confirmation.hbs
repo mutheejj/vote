@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vote Confirmation</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f3f4f6; padding: 40px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <tr>
+            <td style="background: linear-gradient(135deg, #059669 0%, #047857 100%); padding: 40px; text-align: center; border-radius: 8px 8px 0 0;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">✅ Vote Successfully Recorded</h1>
+              <p style="color: #d1fae5; margin: 10px 0 0 0; font-size: 14px;">Thank you for participating</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 40px;">
+              <h2 style="color: #059669; margin: 0 0 20px 0; font-size: 24px;">Dear {{firstName}},</h2>
+              <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                Your vote has been successfully recorded and secured in our system.
+              </p>
+              <div style="background-color: #f0fdf4; border-radius: 8px; padding: 25px; margin: 30px 0;">
+                <h3 style="color: #065f46; margin: 0 0 15px 0; font-size: 18px;">📋 Vote Details</h3>
+                <table width="100%" cellpadding="5" cellspacing="0">
+                  <tr>
+                    <td style="color: #6b7280; font-size: 14px; padding: 8px 0;"><strong>Election:</strong></td>
+                    <td style="color: #374151; font-size: 14px; padding: 8px 0;">{{electionTitle}}</td>
+                  </tr>
+                  <tr>
+                    <td style="color: #6b7280; font-size: 14px; padding: 8px 0;"><strong>Timestamp:</strong></td>
+                    <td style="color: #374151; font-size: 14px; padding: 8px 0;">{{timestamp}}</td>
+                  </tr>
+                  <tr>
+                    <td style="color: #6b7280; font-size: 14px; padding: 8px 0;"><strong>Verification Code:</strong></td>
+                    <td style="color: #374151; font-size: 14px; padding: 8px 0;"><code style="background-color: #e5e7eb; padding: 4px 8px; border-radius: 4px; font-family: 'Courier New', monospace;">{{verificationCode}}</code></td>
+                  </tr>
+                  <tr>
+                    <td style="color: #6b7280; font-size: 14px; padding: 8px 0;" valign="top"><strong>Vote Hash:</strong></td>
+                    <td style="color: #374151; font-size: 12px; padding: 8px 0; word-break: break-all;"><code style="background-color: #e5e7eb; padding: 4px 8px; border-radius: 4px; font-family: 'Courier New', monospace;">{{voteHash}}</code></td>
+                  </tr>
+                </table>
+              </div>
+              <div style="background-color: #eff6ff; border-left: 4px solid #2563eb; padding: 15px; margin: 30px 0; border-radius: 4px;">
+                <p style="color: #1e40af; font-size: 14px; margin: 0;">
+                  💡 <strong>Keep this confirmation safe!</strong> You can use the verification code to verify your vote was counted in the final results.
+                </p>
+              </div>
+              <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 20px 0 0 0;">
+                Thank you for participating in the democratic process. Your vote receipt is attached to this email.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; border-top: 1px solid #e5e7eb;">
+              <p style="color: #6b7280; font-size: 14px; text-align: center; margin: 0;">Best regards,<br><strong>UniElect Team</strong></p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

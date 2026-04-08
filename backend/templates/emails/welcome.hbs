@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to UniElect</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f3f4f6; padding: 40px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; text-align: center; border-radius: 8px 8px 0 0;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">
+                Welcome to UniElect!
+              </h1>
+              <p style="color: #e0e7ff; margin: 10px 0 0 0; font-size: 14px;">
+                Your Voice, Your Vote, Your Future
+              </p>
+            </td>
+          </tr>
+
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px;">
+              <h2 style="color: #2563eb; margin: 0 0 20px 0; font-size: 24px;">
+                Dear {{firstName}},
+              </h2>
+
+              <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                Welcome to the UniElect Voting System! Your account has been successfully created, and you're now part of our democratic community.
+              </p>
+
+              <!-- Student Info Box -->
+              <div style="background-color: #eff6ff; border-left: 4px solid #2563eb; padding: 20px; margin: 30px 0; border-radius: 4px;">
+                <p style="color: #1e40af; font-size: 14px; margin: 0 0 10px 0; font-weight: 600;">
+                  Your Account Details:
+                </p>
+                <p style="color: #374151; font-size: 14px; margin: 0;">
+                  <strong>Student ID:</strong> {{studentId}}
+                </p>
+              </div>
+
+              <!-- Next Steps -->
+              <div style="background-color: #f9fafb; padding: 25px; margin: 30px 0; border-radius: 8px;">
+                <h3 style="color: #1f2937; margin: 0 0 15px 0; font-size: 18px;">Next Steps:</h3>
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding: 10px 0;">
+                      <div style="display: inline-block; width: 30px; height: 30px; background-color: #2563eb; color: white; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; vertical-align: middle;">1</div>
+                      <span style="color: #374151; font-size: 14px; margin-left: 10px; vertical-align: middle;">Verify your email address</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 0;">
+                      <div style="display: inline-block; width: 30px; height: 30px; background-color: #2563eb; color: white; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; vertical-align: middle;">2</div>
+                      <span style="color: #374151; font-size: 14px; margin-left: 10px; vertical-align: middle;">Complete your profile setup</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 0;">
+                      <div style="display: inline-block; width: 30px; height: 30px; background-color: #2563eb; color: white; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; vertical-align: middle;">3</div>
+                      <span style="color: #374151; font-size: 14px; margin-left: 10px; vertical-align: middle;">Browse available elections</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 20px 0 0 0;">
+                If you have any questions or need assistance, our support team is here to help.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; border-top: 1px solid #e5e7eb;">
+              <p style="color: #6b7280; font-size: 14px; text-align: center; margin: 0 0 10px 0;">
+                Best regards,<br>
+                <strong>UniElect Team</strong>
+              </p>
+              <div style="text-align: center; margin: 20px 0;">
+                <p style="color: #9ca3af; font-size: 12px; margin: 0;">
+                  Jomo Kenyatta University of Agriculture and Technology
+                </p>
+              </div>
+              <div style="text-align: center; margin: 20px 0; padding: 20px 0; border-top: 1px solid #e5e7eb;">
+                <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+                  © {{year}} UniElect Voting System. All rights reserved.
+                </p>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
