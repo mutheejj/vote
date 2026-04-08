@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme - Sage Green modern theme */
+    --background: 0 0% 100%;
+    --foreground: 150 10% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 150 10% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 10% 10%;
+    --primary: 152 45% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 20% 95%;
+    --secondary-foreground: 150 10% 15%;
+    --muted: 150 15% 95%;
+    --muted-foreground: 150 5% 45%;
+    --accent: 158 50% 42%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 150 15% 88%;
+    --input: 150 15% 88%;
+    --ring: 152 45% 45%;
+    --success: 152 60% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 10%;
+    --error: 0 84.2% 60.2%;
+    --error-foreground: 0 0% 98%;
+    --radius: 0.625rem;
+
+    /* Sage Green gradient colors */
+    --sage: 152 45% 45%;
+    --sage-light: 150 40% 60%;
+    --sage-dark: 154 50% 35%;
+    --emerald: 158 50% 42%;
+    --emerald-light: 156 45% 55%;
+    --emerald-dark: 160 55% 32%;
+
+    /* Font family */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  .dark {
+    /* Dark theme - Sage Green modern theme */
+    --background: 160 15% 6%;
+    --foreground: 150 10% 95%;
+    --card: 160 12% 10%;
+    --card-foreground: 150 10% 95%;
+    --popover: 160 12% 10%;
+    --popover-foreground: 150 10% 95%;
+    --primary: 152 50% 50%;
+    --primary-foreground: 160 15% 6%;
+    --secondary: 160 10% 18%;
+    --secondary-foreground: 150 10% 95%;
+    --muted: 160 10% 18%;
+    --muted-foreground: 150 10% 60%;
+    --accent: 158 55% 48%;
+    --accent-foreground: 160 15% 6%;
+    --destructive: 0 62.8% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 160 10% 20%;
+    --input: 160 10% 20%;
+    --ring: 152 50% 50%;
+    --success: 152 55% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 95% 56%;
+    --warning-foreground: 0 0% 10%;
+    --error: 0 62.8% 45%;
+    --error-foreground: 0 0% 98%;
+
+    /* Sage Green gradient colors for dark mode */
+    --sage: 152 50% 50%;
+    --sage-light: 150 45% 60%;
+    --sage-dark: 154 55% 40%;
+    --emerald: 158 55% 48%;
+    --emerald-light: 156 50% 58%;
+    --emerald-dark: 160 60% 38%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-sage-500/30 dark:bg-sage-400/40 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-sage-500/50 dark:bg-sage-400/60;
+  }
+
+  /* Selection styles */
+  ::selection {
+    @apply bg-sage-500/20 text-sage-900 dark:text-sage-100;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-sage-600 to-emerald-600 text-white hover:from-sage-700 hover:to-emerald-700 shadow-lg shadow-sage-500/25 transition-all duration-200;
+  }
+
+  .card-base {
+    @apply rounded-xl border bg-card text-card-foreground shadow-sm;
+  }
+
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5;
+  }
+
+  .loading-skeleton {
+    @apply animate-pulse bg-muted rounded-lg;
+  }
+
+  .glassmorphism {
+    @apply bg-background/80 backdrop-blur-xl border border-border/50;
+  }
+
+  .gradient-sage-emerald {
+    @apply bg-gradient-to-r from-sage-600 to-emerald-600;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-sage-600 to-emerald-600 bg-clip-text text-transparent;
+  }
+
+  /* Election status badges */
+  .status-draft {
+    @apply bg-muted text-muted-foreground rounded-full;
+  }
+
+  .status-scheduled {
+    @apply bg-sage-100 text-sage-800 dark:bg-sage-900/50 dark:text-sage-300 rounded-full;
+  }
+
+  .status-active {
+    @apply bg-success/10 text-success border-success/20 rounded-full;
+  }
+
+  .status-paused {
+    @apply bg-warning/10 text-warning border-warning/20 rounded-full;
+  }
+
+  .status-completed {
+    @apply bg-muted text-muted-foreground rounded-full;
+  }
+
+  .status-cancelled {
+    @apply bg-destructive/10 text-destructive border-destructive/20 rounded-full;
+  }
+
+  .status-archived {
+    @apply bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 rounded-full;
+  }
+
+  /* Auth page backgrounds */
+  .auth-bg-gradient {
+    @apply bg-gradient-to-br from-sage-50 via-emerald-50 to-green-50 dark:from-gray-950 dark:via-sage-950/20 dark:to-emerald-950/20;
+  }
+
+  /* Modern auth background with image support */
+  .auth-bg-image {
+    @apply relative min-h-screen w-full;
+  }
+
+  .auth-bg-image::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br from-sage-900/85 via-emerald-900/80 to-green-900/85;
+  }
+
+  /* Grid pattern background */
+  .bg-grid-white\/10 {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+}
+
+@layer utilities {
+  /* Custom spinner animations */
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-fast {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 2s linear infinite;
+  }
+
+  .animate-spin-fast {
+    animation: spin-fast 0.5s linear infinite;
+  }
+}
