@@ -88,7 +88,7 @@ export class CandidatePreRegistrationService {
         throw new NotFoundError('Election not found');
       }
 
-      if (election.status !== 'DRAFT' && election.status !== 'SCHEDULED') {
+      if (election.status !== 'DRAFT' && election.status !== 'SCHEDULED' && election.status !== 'ACTIVE') {
         throw new ValidationError('Election is not accepting candidate applications');
       }
 
@@ -855,21 +855,13 @@ export class CandidatePreRegistrationService {
     try {
       const now = new Date();
 
+      // Get all elections regardless of status - allow applications to DRAFT, SCHEDULED, and ACTIVE
       const elections = await prisma.election.findMany({
         where: {
-          AND: [
-            {
-              OR: [
-                { status: 'DRAFT' },
-                { status: 'SCHEDULED' }
-              ]
-            },
-            {
-              OR: [
-                { registrationEnd: null },
-                { registrationEnd: { gte: now } }
-              ]
-            }
+          OR: [
+            { status: 'DRAFT' },
+            { status: 'SCHEDULED' },
+            { status: 'ACTIVE' }
           ]
         },
         select: {
