@@ -174,14 +174,10 @@ export const electionValidation = {
       .withMessage('Invalid election type'),
     body('startDate')
       .notEmpty().withMessage('Start date is required')
-      .isISO8601().withMessage('Invalid date format')
-      .custom((value) => new Date(value) > new Date())
-      .withMessage('Start date must be in the future'),
+      .isISO8601().withMessage('Invalid date format'),
     body('endDate')
       .notEmpty().withMessage('End date is required')
-      .isISO8601().withMessage('Invalid date format')
-      .custom((value, { req }) => new Date(value) > new Date(req.body.startDate))
-      .withMessage('End date must be after start date'),
+      .isISO8601().withMessage('Invalid date format'),
     body('eligibleFaculties')
       .optional()
       .isArray().withMessage('Eligible faculties must be an array'),
