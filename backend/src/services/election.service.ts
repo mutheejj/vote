@@ -278,10 +278,9 @@ export class ElectionService {
           },
         });
 
-        // Update positions if provided
+        // Update positions if provided (for DRAFT or PAUSED elections)
         if (updateData.positions?.length) {
-          // Delete existing positions if election is still in draft
-          if (existingElection.status === ElectionStatus.DRAFT) {
+          if (existingElection.status === ElectionStatus.DRAFT || existingElection.status === ElectionStatus.PAUSED) {
             await tx.position.deleteMany({
               where: { electionId },
             });
@@ -956,12 +955,6 @@ export class ElectionService {
         throw new ValidationError('Only paused elections can be resumed');
       }
 
-      // Check if election period is still valid
-      const now = new Date();
-      if (now > election.endDate) {
-        throw new ValidationError('Cannot resume election past its end date');
-      }
-
       const updatedElection = await Database.runInTransaction(async (tx) => {
         const updatedElection = await tx.election.update({
           where: { id: electionId },
@@ -1467,81 +1460,19 @@ export class ElectionService {
   /**
    * Validate election data
    */
-  private async validateElectionData(data: CreateElectionData): Promise<void> {
-    const errors: string[] = [];
-
-    if (!data.title?.trim()) {
-      errors.push('Title is required');
-    }
-
-    if (!data.description?.trim()) {
-      errors.push('Description is required');
-    }
-
-    if (!data.startDate || !data.endDate) {
-      errors.push('Start date and end date are required');
-    }
-
-    if (data.startDate && data.endDate && data.startDate >= data.endDate) {
-      errors.push('End date must be after start date');
-    }
-
-    if (data.startDate && data.startDate < new Date()) {
-      errors.push('Start date cannot be in the past');
-    }
-
-    if (data.registrationStart && data.registrationEnd && data.registrationStart >= data.registrationEnd) {
-      errors.push('Registration end date must be after registration start date');
-    }
-
-    if (!data.positions || data.positions.length === 0) {
-      errors.push('At least one position is required');
-    }
-
-    if (data.positions) {
-      data.positions.forEach((pos, index) => {
-        if (!pos.name?.trim()) {
-          errors.push(`Position ${index + 1}: Name is required`);
-        }
-        if (pos.maxSelections < 1) {
-          errors.push(`Position ${index + 1}: Maximum selections must be at least 1`);
-        }
-        if (pos.minSelections < 0) {
-          errors.push(`Position ${index + 1}: Minimum selections cannot be negative`);
-        }
-        if (pos.minSelections > pos.maxSelections) {
-          errors.push(`Position ${index + 1}: Minimum selections cannot exceed maximum selections`);
-        }
-      });
-    }
-
-    if (errors.length > 0) {
-      throw new ValidationError(errors.join('; '));
-    }
+  private async validateElectionData(_data: CreateElectionData): Promise<void> {
+    // All validation has been moved to the frontend. Backend accepts any payload
+    // and relies on business logic/DB constraints only. This now intentionally
+    // permits past dates, overlapping periods, empty descriptions, etc.
+    return;
   }
 
   /**
    * Check for election conflicts
    */
   private async checkElectionConflicts(data: CreateElectionData): Promise<void> {
-    const overlapping = await prisma.election.findFirst({
-      where: {
-        type: data.type,
-        status: {
-          notIn: [ElectionStatus.CANCELLED, ElectionStatus.ARCHIVED],
-        },
-        OR: [
-          {
-            startDate: { lte: data.endDate },
-            endDate: { gte: data.startDate },
-          },
-        ],
-      },
-    });
-
-    if (overlapping) {
-      throw new ConflictError(`An election of type "${data.type}" is already scheduled during this period`);
-    }
+    // Allow overlapping elections - no restrictions
+    return;
   }
 
   /**
