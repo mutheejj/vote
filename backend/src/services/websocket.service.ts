@@ -29,7 +29,7 @@ export class WebSocketService {
   public initialize(server: HttpServer): void {
     this.io = new SocketIOServer(server, {
       cors: {
-        origin: process.env.FRONTEND_URL || "http://localhost:3000",
+        origin: "*",
         methods: ["GET", "POST"],
         credentials: true,
       },
