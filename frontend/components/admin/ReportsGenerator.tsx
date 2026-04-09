@@ -558,7 +558,7 @@ export const ReportsGenerator: React.FC<ReportsGeneratorProps> = ({
                               <SelectValue placeholder="All types" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">All types</SelectItem>
+                              <SelectItem value="all">All types</SelectItem>
                               {Object.entries(ELECTION_TYPE_LABELS).map(([key, label]) => (
                                 <SelectItem key={key} value={key}>
                                   {label}
@@ -577,7 +577,7 @@ export const ReportsGenerator: React.FC<ReportsGeneratorProps> = ({
                               <SelectValue placeholder="All statuses" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">All statuses</SelectItem>
+                              <SelectItem value="all">All statuses</SelectItem>
                               {Object.entries(ELECTION_STATUS_LABELS).map(([key, label]) => (
                                 <SelectItem key={key} value={key}>
                                   {label}
@@ -600,7 +600,7 @@ export const ReportsGenerator: React.FC<ReportsGeneratorProps> = ({
                             <SelectValue placeholder="All faculties" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="">All faculties</SelectItem>
+                            <SelectItem value="all">All faculties</SelectItem>
                             {UNIVERSITY_FACULTIES.map(faculty => (
                               <SelectItem key={faculty} value={faculty}>
                                 {faculty}

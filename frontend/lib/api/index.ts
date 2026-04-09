@@ -63,7 +63,7 @@ export const baseApi = axios.create({
 
 // Global request interceptor
 baseApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem('jkuat-voting-access-token');
+  const token = localStorage.getItem('unielect-voting-access-token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -76,9 +76,9 @@ baseApi.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Token expired or invalid - redirect to login
-      localStorage.removeItem('jkuat-voting-access-token');
-      localStorage.removeItem('jkuat-voting-refresh-token');
-      localStorage.removeItem('jkuat-voting-user');
+      localStorage.removeItem('unielect-voting-access-token');
+      localStorage.removeItem('unielect-voting-refresh-token');
+      localStorage.removeItem('unielect-voting-user');
       window.location.href = '/login';
     }
     return Promise.reject(error);

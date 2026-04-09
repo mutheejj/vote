@@ -80,13 +80,6 @@ export default function WelcomePage() {
     }
   ]
 
-  const stats = [
-    { label: "Registered Students", value: "5,000+", icon: Users },
-    { label: "Elections Held", value: "25+", icon: Vote },
-    { label: "Votes Processed", value: "50K+", icon: CheckCircle },
-    { label: "Platform Uptime", value: "99.8%", icon: Clock }
-  ]
-
   const testimonials = [
     {
       quote: "UniElect made our student council election completely seamless. Turnout doubled compared to the paper ballot days.",
@@ -241,20 +234,6 @@ export default function WelcomePage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── STATS BAR ──────────────────────────────────────── */}
-      <section className="py-10 bg-gray-50 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {stats.map((stat, i) => (
-              <div key={i} className="text-center">
-                <p className="text-3xl font-extrabold text-gray-900">{stat.value}</p>
-                <p className="text-sm text-gray-500 mt-1">{stat.label}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>

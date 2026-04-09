@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
-import { useForm, useFieldArray } from "react-hook-form"
+import { useForm, useFieldArray, type FieldErrors } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import {
@@ -71,8 +71,8 @@ import { format } from "date-fns"
 
 // Validation schema
 const electionFormSchema = z.object({
-  title: z.string().min(5, "Title must be at least 5 characters").max(200, "Title must be less than 200 characters"),
-  description: z.string().min(10, "Description must be at least 10 characters").max(2000, "Description must be less than 2000 characters"),
+  title: z.string().min(1, "Title is required").max(200),
+  description: z.string().max(2000),
   type: z.nativeEnum(ElectionType),
   startDate: z.string().min(1, "Start date is required"),
   endDate: z.string().min(1, "End date is required"),
@@ -99,31 +99,6 @@ const electionFormSchema = z.object({
     maxSelections: z.number().min(1),
     minSelections: z.number().min(0),
   })).min(1, "At least one position is required"),
-}).refine((data) => {
-  const start = new Date(data.startDate)
-  const end = new Date(data.endDate)
-  return end > start
-}, {
-  message: "End date must be after start date",
-  path: ["endDate"],
-}).refine((data) => {
-  if (data.registrationStart && data.registrationEnd) {
-    const regStart = new Date(data.registrationStart)
-    const regEnd = new Date(data.registrationEnd)
-    return regEnd > regStart
-  }
-  return true
-}, {
-  message: "Registration end date must be after registration start date",
-  path: ["registrationEnd"],
-}).refine((data) => {
-  if (data.minVoterAge && data.maxVoterAge) {
-    return data.maxVoterAge > data.minVoterAge
-  }
-  return true
-}, {
-  message: "Maximum age must be greater than minimum age",
-  path: ["maxVoterAge"],
 })
 
 type ElectionFormData = z.infer<typeof electionFormSchema>
@@ -219,6 +194,42 @@ export default function AdminElectionEditPage() {
           })) || [],
         }
 
+  const handleFormError = (errors: FieldErrors<ElectionFormData>) => {
+    console.error("Election form validation errors:", errors)
+
+    const formatErrorMessage = (field: string, message?: string) => {
+      const formattedField = field
+        .replace(/positions\.(\d+)\./, (match, index) => `Position #${parseInt(index) + 1} → `)
+        .replace(/([A-Z])/g, " $1")
+        .replace(/^./, (str) => str.toUpperCase())
+        .trim()
+
+      return `${formattedField}: ${message || "This field is required"}`
+    }
+
+    const errorMessages = Object.entries(errors).flatMap(([field, error]) => {
+      if (!error) return []
+
+      if ((error as any).types) {
+        return Object.values((error as any).types as Record<string, string>).map((msg) =>
+          formatErrorMessage(field, msg)
+        )
+      }
+
+      if ('message' in error && error.message) {
+        return [formatErrorMessage(field, error.message as string)]
+      }
+
+      return [formatErrorMessage(field)]
+    })
+
+    toast.error(
+      errorMessages.length
+        ? errorMessages.slice(0, 3).join('\n')
+        : "Please fix the highlighted fields before saving."
+    )
+  }
+
         form.reset(formData)
         setHasUnsavedChanges(false)
       }
@@ -288,7 +299,10 @@ export default function AdminElectionEditPage() {
   }
 
   const canEdit = () => {
-    return election?.status === ElectionStatus.DRAFT || election?.status === ElectionStatus.SCHEDULED
+    // Allow editing for DRAFT, SCHEDULED, and PAUSED elections
+    return election?.status === ElectionStatus.DRAFT || 
+           election?.status === ElectionStatus.SCHEDULED ||
+           election?.status === ElectionStatus.PAUSED
   }
 
   if (isLoading) {
@@ -380,13 +394,13 @@ export default function AdminElectionEditPage() {
             </Link>
           </Button>
           <Button
-            size="sm"
-            onClick={form.handleSubmit(onSubmit)}
-            disabled={isSaving || !hasUnsavedChanges}
-          >
-            <Save className="h-4 w-4 mr-2" />
-            {isSaving ? "Saving..." : "Save Changes"}
-          </Button>
+          size="sm"
+          onClick={form.handleSubmit(onSubmit, handleFormError)}
+          disabled={isSaving || !hasUnsavedChanges}
+        >
+          <Save className="h-4 w-4 mr-2" />
+          {isSaving ? "Saving..." : "Save Changes"}
+        </Button>
         </div>
       </div>
 
@@ -404,7 +418,7 @@ export default function AdminElectionEditPage() {
 
       {/* Form */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit, handleFormError)} className="space-y-6">
           <Tabs defaultValue="basic" className="space-y-6">
             <TabsList className="grid grid-cols-4 w-full">
               <TabsTrigger value="basic">Basic Info</TabsTrigger>

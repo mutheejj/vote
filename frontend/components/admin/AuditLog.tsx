@@ -391,7 +391,7 @@ export const AuditLog: React.FC<AuditLogProps> = ({
                     <SelectValue placeholder="All categories" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All categories</SelectItem>
+                    <SelectItem value="all">All categories</SelectItem>
                     {(Object.values(AuditCategory) as string[]).map((category: string) => (
                       <SelectItem key={category} value={category}>
                         {category}
@@ -411,7 +411,7 @@ export const AuditLog: React.FC<AuditLogProps> = ({
                     <SelectValue placeholder="All severities" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All severities</SelectItem>
+                    <SelectItem value="all">All severities</SelectItem>
                     {(Object.values(AuditSeverity) as string[]).map((severity: string) => (
                       <SelectItem key={severity} value={severity}>
                         {severity}

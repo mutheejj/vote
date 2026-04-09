@@ -73,43 +73,32 @@ import { getPositionTemplates, hasPositionTemplates } from '@/lib/config/positio
 
 // Validation Schema
 const positionSchema = z.object({
-  name: z.string().min(2, 'Position name must be at least 2 characters').max(100, 'Position name must not exceed 100 characters'),
+  name: z.string(),
   description: z.string().optional(),
-  order: z.number().min(1, 'Order must be at least 1').max(100, 'Order must not exceed 100'),
-  maxSelections: z.number().min(1, 'Max selections must be at least 1').max(10, 'Max selections must not exceed 10'),
-  minSelections: z.number().min(0, 'Min selections cannot be negative').max(10, 'Min selections must not exceed 10'),
-}).refine((data) => data.minSelections <= data.maxSelections, {
-  message: "Min selections cannot exceed max selections",
-  path: ["minSelections"],
+  order: z.number().default(1),
+  maxSelections: z.number().default(1),
+  minSelections: z.number().default(1),
 })
 
 const electionSchema = z.object({
-  title: z.string()
-    .min(5, 'Title must be at least 5 characters')
-    .max(200, 'Title must not exceed 200 characters'),
-  description: z.string()
-    .min(10, 'Description must be at least 10 characters')
-    .max(2000, 'Description must not exceed 2000 characters'),
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().min(1, 'Description is required'),
   type: z.nativeEnum(ElectionType),
-  startDate: z.string().refine((date) => {
-    const startDate = new Date(date)
-    const minStartDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour from now
-    return startDate > minStartDate
-  }, 'Start date must be at least 1 hour from now'),
-  endDate: z.string(),
+  startDate: z.string().min(1, 'Start date is required'),
+  endDate: z.string().min(1, 'End date is required'),
   registrationStart: z.string().optional(),
   registrationEnd: z.string().optional(),
 
-  // Eligibility
+  // Eligibility - all optional
   eligibleFaculties: z.array(z.string()).optional(),
   eligibleDepartments: z.array(z.string()).optional(),
   eligibleCourses: z.array(z.string()).optional(),
   eligibleYears: z.array(z.number()).optional(),
-  minVoterAge: z.number().min(16).max(100).optional(),
-  maxVoterAge: z.number().min(16).max(100).optional(),
+  minVoterAge: z.number().optional(),
+  maxVoterAge: z.number().optional(),
 
   // Voting Rules
-  maxVotesPerPosition: z.number().min(1).max(10).default(1),
+  maxVotesPerPosition: z.number().default(1),
   allowAbstain: z.boolean().default(true),
   requireAllPositions: z.boolean().default(false),
   showLiveResults: z.boolean().default(false),
@@ -120,25 +109,10 @@ const electionSchema = z.object({
   anonymousVoting: z.boolean().default(true),
 
   // Positions
-  positions: z.array(positionSchema).min(1, 'At least one position is required').max(20, 'Maximum 20 positions allowed'),
+  positions: z.array(positionSchema).min(1, 'At least one position with a name is required'),
 
   coverImage: z.string().optional(),
   rules: z.any().optional(),
-}).refine((data) => {
-  const startDate = new Date(data.startDate)
-  const endDate = new Date(data.endDate)
-  const minDuration = 2 * 60 * 60 * 1000 // 2 hours
-  return endDate.getTime() - startDate.getTime() >= minDuration
-}, {
-  message: "Election must run for at least 2 hours",
-  path: ["endDate"],
-}).refine((data) => {
-  const startDate = new Date(data.startDate)
-  const endDate = new Date(data.endDate)
-  return endDate > startDate
-}, {
-  message: "End date must be after start date",
-  path: ["endDate"],
 })
 
 type ElectionFormValues = z.infer<typeof electionSchema>
@@ -191,6 +165,9 @@ export default function CreateElectionPage() {
   const watchedElectionType = form.watch('type')
 
   const onSubmit = async (data: ElectionFormValues) => {
+    console.log('=== FORM SUBMISSION STARTED ===')
+    console.log('Form data:', data)
+    
     try {
       setIsSubmitting(true)
 
@@ -227,8 +204,12 @@ export default function CreateElectionPage() {
         })),
       }
 
+      console.log('Transformed election data:', electionData)
+      
       // Create election
+      console.log('Calling createNewElection API...')
       const newElection = await createNewElection(electionData)
+      console.log('Election created successfully:', newElection)
 
       // Show success toast with redirect information
       toast.success(
@@ -241,8 +222,15 @@ export default function CreateElectionPage() {
         router.push(`/admin/elections/${newElection.id}`)
       }, 1500)
     } catch (error: any) {
-      console.error('Failed to create election:', error)
-      // Error toast is already shown by the hook
+      console.error('=== ELECTION CREATION FAILED ===')
+      console.error('Error details:', error)
+      console.error('Error message:', error.message)
+      console.error('Error response:', error.response?.data)
+      
+      toast.error(
+        'Failed to Create Election',
+        error.response?.data?.error || error.message || 'An error occurred'
+      )
     } finally {
       // Always reset submitting state after a delay (to allow redirect to happen)
       setTimeout(() => {
@@ -271,20 +259,6 @@ export default function CreateElectionPage() {
     return `${year}-${month}-${day}T${hours}:${minutes}`
   }
 
-  const getMinStartDate = () => {
-    const date = new Date(Date.now() + 60 * 60 * 1000) // 1 hour from now
-    return formatDateTimeLocal(date)
-  }
-
-  const getMinEndDate = () => {
-    const startDate = form.watch('startDate')
-    if (startDate) {
-      const date = new Date(startDate)
-      date.setHours(date.getHours() + 2) // Minimum 2 hours after start
-      return formatDateTimeLocal(date)
-    }
-    return ''
-  }
 
   return (
     <div className="container mx-auto py-6 max-w-7xl">
@@ -366,7 +340,40 @@ export default function CreateElectionPage() {
 
       {/* Main Form */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit, (errors) => {
+          console.error('=== FORM VALIDATION ERRORS ===')
+          console.error('Errors:', errors)
+          
+          // Map fields to user-friendly names and tabs
+          const fieldMap: Record<string, { label: string; tab: string }> = {
+            'title': { label: 'Election Title', tab: 'Basic Info' },
+            'description': { label: 'Description', tab: 'Basic Info' },
+            'type': { label: 'Election Type', tab: 'Basic Info' },
+            'startDate': { label: 'Start Date', tab: 'Basic Info' },
+            'endDate': { label: 'End Date', tab: 'Basic Info' },
+            'positions': { label: 'Position Name', tab: 'Positions' },
+          }
+          
+          // Build detailed error message with tabs
+          const errorList: string[] = []
+          Object.entries(errors).forEach(([field, error]: any) => {
+            const fieldInfo = fieldMap[field] || { label: field, tab: 'Unknown' }
+            if (field.startsWith('positions.')) {
+              const match = field.match(/positions\.(\d+)\.name/)
+              if (match) {
+                const posIndex = parseInt(match[1]) + 1
+                errorList.push(`📍 Position ${posIndex}: Name is required (Positions tab)`)
+              }
+            } else {
+              errorList.push(`📍 ${fieldInfo.label}: ${error.message || 'Required'} (${fieldInfo.tab} tab)`)
+            }
+          })
+          
+          toast.error(
+            'Please Complete Required Fields', 
+            errorList.join('\n') || 'Check all tabs for missing information'
+          )
+        })} className="space-y-6">
           <Tabs value={currentTab} onValueChange={setCurrentTab}>
             <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="basic">Basic Info</TabsTrigger>
@@ -472,11 +479,11 @@ export default function CreateElectionPage() {
                 <CardContent className="space-y-4">
                   <Alert>
                     <Info className="h-4 w-4" />
-                    <AlertTitle>Scheduling Requirements</AlertTitle>
+                    <AlertTitle>Scheduling Information</AlertTitle>
                     <AlertDescription>
                       <ul className="list-disc list-inside space-y-1 mt-2 text-sm">
-                        <li>Start date must be at least 1 hour from now</li>
-                        <li>Election must run for minimum 2 hours</li>
+                        <li>Set start and end dates for your election</li>
+                        <li>Elections can start immediately or be scheduled for later</li>
                         <li>Registration period is optional but recommended</li>
                       </ul>
                     </AlertDescription>
@@ -492,7 +499,6 @@ export default function CreateElectionPage() {
                           <FormControl>
                             <Input
                               type="datetime-local"
-                              min={getMinStartDate()}
                               {...field}
                             />
                           </FormControl>
@@ -510,7 +516,6 @@ export default function CreateElectionPage() {
                           <FormControl>
                             <Input
                               type="datetime-local"
-                              min={getMinEndDate()}
                               {...field}
                             />
                           </FormControl>

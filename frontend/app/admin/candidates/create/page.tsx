@@ -344,7 +344,7 @@ export default function CreateCandidatePage() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="">No running mate</SelectItem>
+                            <SelectItem value="none">No running mate</SelectItem>
                             {(usersData as any)?.data?.map((user: any) => (
                               <SelectItem key={user.id} value={user.id}>
                                 {user.firstName} {user.lastName} ({user.studentId})

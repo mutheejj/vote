@@ -161,7 +161,7 @@ export default function CandidatePage() {
             <RefreshCw className={cn("h-4 w-4 mr-2", isRefreshing && "animate-spin")} />
             Refresh
           </Button>
-          <Link href="/elections">
+          <Link href="/register/candidate">
             <Button size="sm" className="bg-gradient-to-r from-sage-600 to-emerald-600 hover:from-sage-700 hover:to-emerald-700 text-white">
               <Plus className="h-4 w-4 mr-2" />
               Apply for Election

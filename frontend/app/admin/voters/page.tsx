@@ -384,20 +384,24 @@ export default function AdminVotersPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {voterStats && (
+                {voterStats && voterStats.newRegistrations ? (
                   <div className="grid gap-4 md:grid-cols-3">
                     <div className="text-center">
-                      <div className="text-2xl font-bold">{voterStats.newRegistrations.today}</div>
+                      <div className="text-2xl font-bold">{voterStats.newRegistrations.today ?? 0}</div>
                       <p className="text-sm text-muted-foreground">Today</p>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold">{voterStats.newRegistrations.thisWeek}</div>
+                      <div className="text-2xl font-bold">{voterStats.newRegistrations.thisWeek ?? 0}</div>
                       <p className="text-sm text-muted-foreground">This Week</p>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold">{voterStats.newRegistrations.thisMonth}</div>
+                      <div className="text-2xl font-bold">{voterStats.newRegistrations.thisMonth ?? 0}</div>
                       <p className="text-sm text-muted-foreground">This Month</p>
                     </div>
+                  </div>
+                ) : (
+                  <div className="text-center text-muted-foreground py-4">
+                    No registration data available
                   </div>
                 )}
               </CardContent>

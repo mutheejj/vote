@@ -16,7 +16,8 @@ import {
   Award,
   MapPin,
   BookOpen,
-  Share2
+  Share2,
+  Edit
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -163,6 +164,14 @@ export default function ElectionDetailsPage() {
               <Badge variant={getStatusVariant()}>
                 {ELECTION_STATUS_LABELS[election.status]}
               </Badge>
+              {(user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN') && (
+                <Button variant="outline" size="sm" asChild>
+                  <Link href={`/admin/elections/${election.id}/edit`}>
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit Election
+                  </Link>
+                </Button>
+              )}
               <Button variant="outline" size="sm">
                 <Share2 className="h-4 w-4 mr-2" />
                 Share
