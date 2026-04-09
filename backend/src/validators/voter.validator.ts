@@ -80,23 +80,7 @@ export const validateVoterStatusUpdate = [
   body('suspensionEndDate')
     .optional()
     .isISO8601()
-    .withMessage('Suspension end date must be a valid ISO 8601 date')
-    .custom((value) => {
-      if (value) {
-        const suspensionEndDate = new Date(value);
-        const now = new Date();
-
-        if (suspensionEndDate <= now) {
-          throw new Error('Suspension end date must be in the future');
-        }
-
-        const maxSuspension = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000); // 1 year max
-        if (suspensionEndDate > maxSuspension) {
-          throw new Error('Suspension cannot exceed 1 year');
-        }
-      }
-      return true;
-    }),
+    .withMessage('Suspension end date must be a valid ISO 8601 date'),
 ];
 
 // Voter Eligibility Check Validation
@@ -216,22 +200,7 @@ export const validateVoterBulkOperation = [
   body('suspensionEndDate')
     .if(body('operation').equals('suspend'))
     .isISO8601()
-    .withMessage('Suspension end date is required for suspend operation')
-    .custom((value) => {
-      const suspensionEndDate = new Date(value);
-      const now = new Date();
-
-      if (suspensionEndDate <= now) {
-        throw new Error('Suspension end date must be in the future');
-      }
-
-      const maxSuspension = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000); // 1 year max
-      if (suspensionEndDate > maxSuspension) {
-        throw new Error('Suspension cannot exceed 1 year');
-      }
-
-      return true;
-    }),
+    .withMessage('Suspension end date is required for suspend operation'),
 ];
 
 // Voter Import Validation
@@ -317,18 +286,7 @@ export const validateVoterStatistics = [
   query('endDate')
     .optional()
     .isISO8601()
-    .withMessage('End date must be a valid ISO 8601 date')
-    .custom((value, { req }) => {
-      if (value && req.query && req.query.startDate) {
-        const endDate = new Date(value);
-        const startDate = new Date(req.query.startDate as string);
-
-        if (endDate <= startDate) {
-          throw new Error('End date must be after start date');
-        }
-      }
-      return true;
-    }),
+    .withMessage('End date must be a valid ISO 8601 date'),
 
   query('groupBy')
     .optional()
@@ -546,23 +504,7 @@ export const validateAnalyticsReport = [
   query('endDate')
     .if(query('period').equals('custom'))
     .isISO8601()
-    .withMessage('End date must be a valid ISO 8601 date')
-    .custom((value, { req }) => {
-      if (value && req.query && req.query.startDate) {
-        const endDate = new Date(value);
-        const startDate = new Date(req.query.startDate as string);
-
-        if (endDate <= startDate) {
-          throw new Error('End date must be after start date');
-        }
-
-        const maxPeriod = new Date(startDate.getTime() + 365 * 24 * 60 * 60 * 1000); // 1 year max
-        if (endDate > maxPeriod) {
-          throw new Error('Date range cannot exceed 1 year');
-        }
-      }
-      return true;
-    }),
+    .withMessage('End date must be a valid ISO 8601 date'),
 ];
 
 export default {
