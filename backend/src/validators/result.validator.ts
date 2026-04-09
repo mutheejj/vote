@@ -113,19 +113,7 @@ export const validateCompareResults = [
   query('startDate')
     .optional()
     .isISO8601()
-    .withMessage('Start date must be a valid ISO 8601 date')
-    .custom((value) => {
-      if (value) {
-        const date = new Date(value);
-        if (isNaN(date.getTime())) {
-          throw new Error('Start date must be a valid date');
-        }
-        if (date > new Date()) {
-          throw new Error('Start date cannot be in the future');
-        }
-      }
-      return true;
-    }),
+    .withMessage('Start date must be a valid ISO 8601 date'),
 
   query('endDate')
     .optional()
@@ -136,16 +124,6 @@ export const validateCompareResults = [
         const endDate = new Date(value);
         if (isNaN(endDate.getTime())) {
           throw new Error('End date must be a valid date');
-        }
-        if (endDate > new Date()) {
-          throw new Error('End date cannot be in the future');
-        }
-
-        if (req.query && req.query.startDate) {
-          const startDate = new Date(req.query.startDate as string);
-          if (endDate <= startDate) {
-            throw new Error('End date must be after start date');
-          }
         }
       }
       return true;
@@ -295,22 +273,6 @@ export const validateDateRange = [
     .optional()
     .isISO8601()
     .withMessage('To date must be a valid ISO 8601 date')
-    .custom((value, { req }) => {
-      if (value && req.query && req.query.from) {
-        const toDate = new Date(value);
-        const fromDate = new Date(req.query.from as string);
-
-        if (toDate <= fromDate) {
-          throw new Error('To date must be after from date');
-        }
-
-        const daysDiff = (toDate.getTime() - fromDate.getTime()) / (1000 * 3600 * 24);
-        if (daysDiff > 365) {
-          throw new Error('Date range cannot exceed 365 days');
-        }
-      }
-      return true;
-    })
 ];
 
 // Demographic filters validation
