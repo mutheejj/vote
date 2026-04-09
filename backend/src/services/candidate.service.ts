@@ -104,11 +104,6 @@ export class CandidateService {
         throw new AppError('Election is not accepting candidate registrations', 400);
       }
 
-      const now = new Date();
-      if (election.registrationEnd && now > election.registrationEnd) {
-        throw new AppError('Candidate registration period has ended', 400);
-      }
-
       // Validate position exists
       const position = election.positions.find(p => p.id === candidateData.positionId);
       if (!position) {
